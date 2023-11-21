@@ -1,6 +1,6 @@
 package com.example.spring_jobs.company;
 
-import com.example.spring_jobs.user.User;
+import com.example.spring_jobs.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,9 @@
-package com.example.spring_jobs.user;
+package com.example.spring_jobs.user.entity;
 
 import com.example.spring_jobs.company.Company;
+import com.example.spring_jobs.user.UserRoleEnum;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +32,13 @@ public class User {
     @OneToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @Builder
+    public User(String loginId, String password, String email, String phone, UserRoleEnum role) {
+        this.loginId = loginId;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.role = role;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.spring_jobs.auth.security;
 
 import com.example.spring_jobs.auth.jwt.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

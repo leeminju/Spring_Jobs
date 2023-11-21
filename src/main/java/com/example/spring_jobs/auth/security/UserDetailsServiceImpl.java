@@ -1,7 +1,7 @@
 package com.example.spring_jobs.auth.security;
 
-import com.example.spring_jobs.user.User;
-import com.example.spring_jobs.user.UserRepository;
+import com.example.spring_jobs.user.entity.User;
+import com.example.spring_jobs.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,8 +15,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+        User user = userRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new UsernameNotFoundException("Not Found " + loginId));
+
+        return new UserDetailsImpl(user);
     }
 }
 
