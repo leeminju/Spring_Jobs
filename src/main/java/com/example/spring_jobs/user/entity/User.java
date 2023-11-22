@@ -1,5 +1,6 @@
 package com.example.spring_jobs.user.entity;
 
+import com.example.spring_jobs.company.entity.Company;
 import com.example.spring_jobs.user.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -7,13 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity(name="user")
+@Entity(name = "user")
 @NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "login_id",nullable = false,unique = true)
+    @Column(name = "login_id", nullable = false, unique = true)
     private String loginId;
     @Column(nullable = false)
     private String password;
@@ -39,5 +40,9 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.role = role;
+    }
+
+    public void addCompany(Company company) {
+        this.company = company;
     }
 }

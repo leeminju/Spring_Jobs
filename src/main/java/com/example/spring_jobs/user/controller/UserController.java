@@ -28,12 +28,6 @@ public class UserController {
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
 	}
 
-	@PostMapping("/signup/company")
-	public ResponseEntity<CustomResponseEntity> signUpCompany(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
-		userService.signup(userSignupRequestDto);
-		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
-	}
-
 	@PostMapping("/signin")
 	public ResponseEntity<CustomResponseEntity> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
 		String token = userService.login(loginRequestDto);
