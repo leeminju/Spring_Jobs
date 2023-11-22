@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Entity(name = "user")
@@ -16,6 +17,7 @@ public class User {
     private Long id;
     @Column(name = "login_id", nullable = false, unique = true)
     private String loginId;
+
     @Column(nullable = false)
     private String password;
 
@@ -44,5 +46,8 @@ public class User {
 
     public void addCompany(Company company) {
         this.company = company;
+    }
+    public void changePassword(String changePassword){
+        this.password = changePassword;
     }
 }

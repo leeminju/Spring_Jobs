@@ -1,17 +1,17 @@
 package com.example.spring_jobs.user.controller;
 
+import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
+import com.example.spring_jobs.user.dto.PasswordRequestDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -30,5 +30,11 @@ public class UserController {
 	public ResponseEntity<CustomResponseEntity> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
 		String token = userService.login(loginRequestDto);
 		return CustomResponseEntity.toResponseEntityWithHeader(StatusEnum.SUCCESS_LOGIN, token);
+	}
+
+	@PatchMapping("/my-info/password")
+	public ResponseEntity<CustomResponseEntity> updatePassword(@Valid @RequestBody PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		userService.updatePassword(passwordRequestDto,userDetails.getUser());
+		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_CHANGE_PASSWORD);
 	}
 }

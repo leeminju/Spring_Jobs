@@ -7,12 +7,14 @@ import com.example.spring_jobs.auth.security.UserDetailsServiceImpl;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
+import com.example.spring_jobs.user.dto.PasswordRequestDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -63,5 +65,30 @@ public class UserService {
         }
 
         return jwtUtil.createToken(loginId, userDetails.getUser().getRole());
+    }
+
+    @Transactional
+    public void updatePassword(PasswordRequestDto passwordRequestDto, User user) {
+        String currentPassword = passwordRequestDto.getCurrentPassword();
+
+        User dbUser = userRepository.findById(user.getId()).orElseThrow(
+                () -> new CustomException(StatusEnum.UsernameNotFoundException)
+        );
+        //현재 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new CustomException(StatusEnum.BadCredentialsException);
+        }
+        //새 비밀번호와 확인 비밀번호가 일치 여부 확인
+        if (!passwordRequestDto.getNewPassword().equals(passwordRequestDto.getCheckPassword())) {
+            throw new CustomException(StatusEnum.NotEqualsCheckPassWordException);
+        }
+
+        //현재 비밀번호와 새 비밀번호가 일치 여부 확인
+        if (passwordRequestDto.getNewPassword().equals(passwordRequestDto.getCurrentPassword())) {
+            throw new CustomException(StatusEnum.EqualsCURRENTPassWordException);
+        }
+
+        String newPassword = passwordEncoder.encode(passwordRequestDto.getNewPassword());
+        dbUser.changePassword(newPassword);
     }
 }
