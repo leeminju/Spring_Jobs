@@ -1,6 +1,6 @@
-package com.example.spring_jobs.user.annotation;
+package com.example.spring_jobs.common.annotation;
 
-import com.example.spring_jobs.user.validator.PasswordValidator;
+import com.example.spring_jobs.common.validator.PasswordValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.Documented;

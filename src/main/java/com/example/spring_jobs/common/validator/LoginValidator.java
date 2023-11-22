@@ -1,6 +1,6 @@
-package com.example.spring_jobs.user.validator;
+package com.example.spring_jobs.common.validator;
 
-import com.example.spring_jobs.user.annotation.LoginId;
+import com.example.spring_jobs.common.annotation.LoginId;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -21,7 +21,7 @@ public class LoginValidator implements ConstraintValidator<LoginId, String> {
         if (!isValidUsername) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(
-                    MessageFormat.format("{0}자 이상의 {1}자 이하의 숫자, 영문자를 포함한 이름을 입력해주세요.",
+                    MessageFormat.format("{0}자 이상의 {1}자 이하의 숫자, 영문자를 포함한 ID를 입력해주세요.",
                             MIN_SIZE,
                             MAX_SIZE)).addConstraintViolation();
         }

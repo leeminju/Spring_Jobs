@@ -1,6 +1,6 @@
-package com.example.spring_jobs.user.validator;
+package com.example.spring_jobs.common.validator;
 
-import com.example.spring_jobs.user.annotation.Phone;
+import com.example.spring_jobs.common.annotation.Phone;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;

@@ -1,12 +1,10 @@
-package com.example.spring_jobs.user.validator;
+package com.example.spring_jobs.common.validator;
 
 
-import com.example.spring_jobs.user.annotation.Email;
+import com.example.spring_jobs.common.annotation.Email;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
-
-import java.text.MessageFormat;
 
 @Component
 public class EmailValidator implements ConstraintValidator<Email, String> {
