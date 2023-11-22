@@ -51,9 +51,13 @@ public class UserService {
     public String login(LoginRequestDto loginRequestDto) {
 
         String loginId = loginRequestDto.getLoginId();
+        Optional<User> checkLoginId = userRepository.findByLoginId(loginId);
+        if (checkLoginId.isEmpty()) {
+            throw new CustomException(StatusEnum.UsernameNotFoundException);
+        }
         String password = loginRequestDto.getPassword();
 
-        UserDetailsImpl userDetails  = userDetailsService.loadUserByUsername(loginId);
+        UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(loginId);
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new CustomException(StatusEnum.BadCredentialsException);
         }
