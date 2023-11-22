@@ -1,6 +1,7 @@
 package com.example.spring_jobs.user.dto;
 
 import com.example.spring_jobs.user.UserRoleEnum;
+import com.example.spring_jobs.user.annotation.LoginId;
 import com.example.spring_jobs.user.annotation.Password;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSignupRequestDto {
+	@LoginId
 	private String loginId;
 	@Password
 	private String password;

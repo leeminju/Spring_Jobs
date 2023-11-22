@@ -1,13 +1,15 @@
 package com.example.spring_jobs.user.validator;
 
-import com.example.spring_jobs.user.annotation.Username;
+import com.example.spring_jobs.user.annotation.LoginId;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
 import java.text.MessageFormat;
+
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsernameValidator implements ConstraintValidator<Username, String> {
+public class LoginValidator implements ConstraintValidator<LoginId, String> {
 
     private static final int MIN_SIZE = 4;
     private static final int MAX_SIZE = 10;
