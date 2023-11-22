@@ -1,6 +1,8 @@
 package com.example.spring_jobs.user.controller;
 
 import com.example.spring_jobs.auth.jwt.JwtUtil;
+import com.example.spring_jobs.common.CustomResponseEntity;
+import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.service.UserService;
@@ -21,24 +23,20 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/signup/user")
-	public ResponseEntity<UserSignupRequestDto> signUpUser(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
+	public ResponseEntity<CustomResponseEntity> signUpUser(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
 		userService.signup(userSignupRequestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
 	}
 
 	@PostMapping("/signup/company")
-	public ResponseEntity<UserSignupRequestDto> signUpCompany(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
+	public ResponseEntity<CustomResponseEntity> signUpCompany(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
 		userService.signup(userSignupRequestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
 	}
 
 	@PostMapping("/signin")
-	public ResponseEntity<LoginRequestDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+	public ResponseEntity<CustomResponseEntity> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
 		String token = userService.login(loginRequestDto);
-
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.header(JwtUtil.AUTHORIZATION_HEADER, token)
-				.build();
+		return CustomResponseEntity.toResponseEntityWithHeader(StatusEnum.SUCCESS_LOGIN, token);
 	}
 }

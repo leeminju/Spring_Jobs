@@ -1,5 +1,7 @@
 package com.example.spring_jobs.auth.exception;
 
+import com.example.spring_jobs.common.CustomResponseEntity;
+import com.example.spring_jobs.common.StatusEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +16,6 @@ public class CustomExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<CustomResponseEntity> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-		String name = exception.getBindingResult().getAllErrors().get(0).getClass().getSimpleName();
-		return CustomResponseEntity.toResponseEntity(StatusEnum.valueOf(name));
+		return CustomResponseEntity.toResponseEntity(exception);
 	}
 }
