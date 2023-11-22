@@ -1,6 +1,8 @@
 package com.example.spring_jobs.auth.security;
 
 import com.example.spring_jobs.auth.jwt.JwtUtil;
+import com.example.spring_jobs.common.StatusEnum;
+import com.example.spring_jobs.common.exception.CustomException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -38,13 +40,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtil.validateToken(tokenValue)) {
-                res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                res.setCharacterEncoding("UTF-8");//한글 깨짐 방지
-                res.setContentType("text/html; charset=UTF-8");//한글 깨짐 방지
-                PrintWriter printWriter = res.getWriter();
-                printWriter.println("토큰이 유효하지 않습니다. " + res.getStatus());
                 log.error("Token Error");
-                return;
+                throw new CustomException(StatusEnum.TOKEN_NOT_VALID);
             }
 
             Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
