@@ -4,7 +4,6 @@ import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.company.dto.CompanySignupRequestDto;
 import com.example.spring_jobs.company.service.CompanyService;
-import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

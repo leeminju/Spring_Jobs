@@ -1,6 +1,5 @@
 package com.example.spring_jobs.user.controller;
 
-import com.example.spring_jobs.auth.jwt.JwtUtil;
 import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
@@ -8,7 +7,6 @@ import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,6 +1,5 @@
 package com.example.spring_jobs.common.validator;
 
-
 import com.example.spring_jobs.common.annotation.Email;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

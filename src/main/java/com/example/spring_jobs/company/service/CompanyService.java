@@ -1,14 +1,11 @@
 package com.example.spring_jobs.company.service;
 
 import com.example.spring_jobs.auth.exception.CustomException;
-import com.example.spring_jobs.auth.jwt.JwtUtil;
-import com.example.spring_jobs.auth.security.UserDetailsServiceImpl;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.company.dto.CompanySignupRequestDto;
 import com.example.spring_jobs.company.entity.Company;
 import com.example.spring_jobs.company.repository.CompanyRepository;
 import com.example.spring_jobs.user.UserRoleEnum;
-import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,10 +44,17 @@ public class CompanyService {
         if (checkCompanyName.isPresent()) {
             throw new CustomException(StatusEnum.DUPLICATED_COMPANY_NAME);
         }
-        User user = User.builder().loginId(loginId).password(password).email(email).phone(companySignupRequestDto.getPhone()).role(UserRoleEnum.COMPANY).build();
-        Company company = Company.builder().companyName(companyName)
-                        .industry(companySignupRequestDto
-                        .getIndustry()).location(companySignupRequestDto.getLocation()).user(user).build();
+        User user = User.builder()
+                .loginId(loginId)
+                .password(password)
+                .email(email)
+                .phone(companySignupRequestDto.getPhone())
+                .role(UserRoleEnum.COMPANY).build();
+        Company company = Company.builder()
+                        .companyName(companyName)
+                        .industry(companySignupRequestDto.getIndustry())
+                        .location(companySignupRequestDto.getLocation())
+                        .user(user).build();
 
         companyRepository.save(company);
     }

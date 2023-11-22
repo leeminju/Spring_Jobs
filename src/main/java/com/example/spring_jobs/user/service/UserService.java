@@ -8,14 +8,13 @@ import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
-import com.example.spring_jobs.user.repository.UserRepository;
 import com.example.spring_jobs.user.entity.User;
-
-import java.util.Optional;
+import com.example.spring_jobs.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
