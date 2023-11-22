@@ -1,4 +1,4 @@
-package com.example.spring_jobs.company;
+package com.example.spring_jobs.user.entity;
 
 import com.example.spring_jobs.user.entity.User;
 import jakarta.persistence.*;

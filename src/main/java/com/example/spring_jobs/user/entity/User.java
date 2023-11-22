@@ -1,6 +1,5 @@
 package com.example.spring_jobs.user.entity;
 
-import com.example.spring_jobs.company.Company;
 import com.example.spring_jobs.user.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.Builder;
