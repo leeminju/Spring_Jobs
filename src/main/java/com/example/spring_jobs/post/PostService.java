@@ -32,9 +32,6 @@ public class PostService {
             getPostList.add(new ArrayList<>(List.of(postDto)));
         });
 
-//        for (Post post : postList) {
-//            getPostList.add(new ArrayList<>(List.of(new PostResponseDTO(post))));
-//        }
 
         return getPostList;
     }
