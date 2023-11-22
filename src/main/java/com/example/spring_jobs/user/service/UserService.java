@@ -1,6 +1,6 @@
 package com.example.spring_jobs.user.service;
 
-import com.example.spring_jobs.auth.exception.CustomException;
+import com.example.spring_jobs.common.exception.CustomException;
 import com.example.spring_jobs.auth.jwt.JwtUtil;
 import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.auth.security.UserDetailsServiceImpl;

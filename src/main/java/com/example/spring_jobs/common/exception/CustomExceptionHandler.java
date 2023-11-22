@@ -1,7 +1,6 @@
-package com.example.spring_jobs.auth.exception;
+package com.example.spring_jobs.common.exception;
 
 import com.example.spring_jobs.common.CustomResponseEntity;
-import com.example.spring_jobs.common.StatusEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

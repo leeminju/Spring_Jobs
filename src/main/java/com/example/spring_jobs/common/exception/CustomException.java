@@ -1,4 +1,4 @@
-package com.example.spring_jobs.auth.exception;
+package com.example.spring_jobs.common.exception;
 
 import com.example.spring_jobs.common.StatusEnum;
 import lombok.AllArgsConstructor;

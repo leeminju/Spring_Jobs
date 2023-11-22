@@ -1,6 +1,6 @@
 package com.example.spring_jobs.company.service;
 
-import com.example.spring_jobs.auth.exception.CustomException;
+import com.example.spring_jobs.common.exception.CustomException;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.company.dto.CompanySignupRequestDto;
 import com.example.spring_jobs.company.entity.Company;
