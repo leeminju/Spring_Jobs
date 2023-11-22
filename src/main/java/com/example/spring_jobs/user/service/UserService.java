@@ -2,6 +2,7 @@ package com.example.spring_jobs.user.service;
 
 import com.example.spring_jobs.auth.exception.CustomException;
 import com.example.spring_jobs.auth.jwt.JwtUtil;
+import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.auth.security.UserDetailsServiceImpl;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.user.UserRoleEnum;
@@ -53,11 +54,11 @@ public class UserService {
         String loginId = loginRequestDto.getLoginId();
         String password = loginRequestDto.getPassword();
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
+        UserDetailsImpl userDetails  = userDetailsService.loadUserByUsername(loginId);
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new CustomException(StatusEnum.BadCredentialsException);
         }
 
-        return jwtUtil.createToken(loginId, UserRoleEnum.valueOf(loginRequestDto.getRole()));
+        return jwtUtil.createToken(loginId, userDetails.getUser().getRole());
     }
 }
