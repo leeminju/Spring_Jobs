@@ -23,6 +23,9 @@ public class Post extends Timestamped{
     private String contents;
 
     @Column(nullable = false)
+    private String job;
+
+    @Column(nullable = false)
     private String deadline;
 
     @Column(nullable = false)
@@ -40,4 +43,17 @@ public class Post extends Timestamped{
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    public Post(PostRequestDTO postRequestDTO) {
+        this.title = postRequestDTO.getTitle();
+        this.image = postRequestDTO.getImage();
+        this.contents = postRequestDTO.getContents();
+        this.job = postRequestDTO.getJob();
+        this.deadline = postRequestDTO.getDeadline();
+        this.career = postRequestDTO.getCareer();
+        this.skill = postRequestDTO.getSkill();
+        this.empType = postRequestDTO.getEmpType();
+        this.education = postRequestDTO.getEducation();
+    }
+
 }
