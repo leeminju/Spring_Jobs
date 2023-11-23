@@ -8,6 +8,7 @@ import com.example.spring_jobs.common.exception.CustomException;
 import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
 import com.example.spring_jobs.user.dto.UserResponseDto;
+import com.example.spring_jobs.user.dto.PasswordRequestDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.dto.UserUpdateDto;
 import com.example.spring_jobs.user.entity.User;
@@ -69,7 +70,6 @@ public class UserService {
         return jwtUtil.createToken(loginId, userDetails.getUser().getRole());
     }
 
-
     public UserResponseDto getUserInfo(String token) {
 
         User user = findUser(token);
@@ -91,5 +91,29 @@ public class UserService {
         User findUser = userRepository.findByLoginId(userInfo.getSubject())
                 .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
         return findUser;
+    }
+    @Transactional
+    public void updatePassword(PasswordRequestDto passwordRequestDto, User user) {
+        String currentPassword = passwordRequestDto.getCurrentPassword();
+
+        User dbUser = userRepository.findById(user.getId()).orElseThrow(
+                () -> new CustomException(StatusEnum.UsernameNotFoundException)
+        );
+        //현재 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new CustomException(StatusEnum.BadCredentialsException);
+        }
+        //새 비밀번호와 확인 비밀번호가 일치 여부 확인
+        if (!passwordRequestDto.getNewPassword().equals(passwordRequestDto.getCheckPassword())) {
+            throw new CustomException(StatusEnum.NotEqualsCheckPassWordException);
+        }
+
+        //현재 비밀번호와 새 비밀번호가 일치 여부 확인
+        if (passwordRequestDto.getNewPassword().equals(passwordRequestDto.getCurrentPassword())) {
+            throw new CustomException(StatusEnum.EqualsCURRENTPassWordException);
+        }
+
+        String newPassword = passwordEncoder.encode(passwordRequestDto.getNewPassword());
+        dbUser.changePassword(newPassword);
     }
 }

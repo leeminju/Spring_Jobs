@@ -1,16 +1,19 @@
 package com.example.spring_jobs.user.controller;
 
+import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.company.dto.CompanyUpdateDto;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
 import com.example.spring_jobs.user.dto.UserResponseDto;
+import com.example.spring_jobs.user.dto.PasswordRequestDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.dto.UserUpdateDto;
 import com.example.spring_jobs.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,4 +46,9 @@ public class UserController {
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_USER_UPDATE);
 	}
 
+	@PatchMapping("/my-info/password")
+	public ResponseEntity<CustomResponseEntity> updatePassword(@Valid @RequestBody PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		userService.updatePassword(passwordRequestDto,userDetails.getUser());
+		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_CHANGE_PASSWORD);
+	}
 }

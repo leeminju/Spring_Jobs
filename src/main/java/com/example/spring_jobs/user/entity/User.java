@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Entity(name = "user")
@@ -18,6 +19,7 @@ public class User {
     private Long id;
     @Column(name = "login_id", nullable = false, unique = true)
     private String loginId;
+
     @Column(nullable = false)
     private String password;
 
@@ -47,7 +49,6 @@ public class User {
     public void addCompany(Company company) {
         this.company = company;
     }
-
     public void updateInfo(UserUpdateDto userUpdateDto) {
         this.email = userUpdateDto.getEmail();
         this.phone = userUpdateDto.getPhone();
@@ -55,5 +56,8 @@ public class User {
     public void updateInfo(CompanyUpdateDto companyUpdateDto) {
         this.email = companyUpdateDto.getEmail();
         this.phone = companyUpdateDto.getPhone();
+    }
+    public void changePassword(String changePassword){
+        this.password = changePassword;
     }
 }
