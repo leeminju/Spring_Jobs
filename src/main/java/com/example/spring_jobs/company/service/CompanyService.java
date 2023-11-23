@@ -1,16 +1,21 @@
 package com.example.spring_jobs.company.service;
 
-import com.example.spring_jobs.common.exception.CustomException;
+import com.example.spring_jobs.auth.jwt.JwtUtil;
 import com.example.spring_jobs.common.StatusEnum;
+import com.example.spring_jobs.common.exception.CustomException;
+import com.example.spring_jobs.company.dto.CompanyResponseDto;
 import com.example.spring_jobs.company.dto.CompanySignupRequestDto;
+import com.example.spring_jobs.company.dto.CompanyUpdateDto;
 import com.example.spring_jobs.company.entity.Company;
 import com.example.spring_jobs.company.repository.CompanyRepository;
 import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -20,6 +25,7 @@ public class CompanyService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CompanyRepository companyRepository;
+    private final JwtUtil jwtUtil;
 
     public void signup(CompanySignupRequestDto companySignupRequestDto) {
         String loginId = companySignupRequestDto.getLoginId();
@@ -57,5 +63,28 @@ public class CompanyService {
                         .user(user).build();
 
         companyRepository.save(company);
+    }
+
+    public CompanyResponseDto getCompanyInfo(String token) {
+
+        Company company = findCompany(token);
+
+        return new CompanyResponseDto(company);
+    }
+
+    @Transactional
+    public void updateCompany(CompanyUpdateDto companyUpdateDto, String token) {
+
+        Company company = findCompany(token);
+        company.updateInfo(companyUpdateDto);
+    }
+
+    private Company findCompany(String token) {
+        String tokenValue = jwtUtil.getJwtFromString(token);
+        Claims userInfo = jwtUtil.getUserInfoFromToken(tokenValue);
+
+        Company findCompany = companyRepository.findByUserLoginId(userInfo.getSubject())
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
+        return findCompany;
     }
 }

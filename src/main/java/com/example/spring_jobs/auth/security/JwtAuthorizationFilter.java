@@ -3,7 +3,6 @@ package com.example.spring_jobs.auth.security;
 import com.example.spring_jobs.auth.jwt.JwtUtil;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.common.exception.CustomException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,7 +18,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {

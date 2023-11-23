@@ -1,18 +1,22 @@
 package com.example.spring_jobs.user.service;
 
-import com.example.spring_jobs.common.exception.CustomException;
 import com.example.spring_jobs.auth.jwt.JwtUtil;
 import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.auth.security.UserDetailsServiceImpl;
 import com.example.spring_jobs.common.StatusEnum;
+import com.example.spring_jobs.common.exception.CustomException;
 import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.dto.LoginRequestDto;
+import com.example.spring_jobs.user.dto.UserResponseDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
+import com.example.spring_jobs.user.dto.UserUpdateDto;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -63,5 +67,29 @@ public class UserService {
         }
 
         return jwtUtil.createToken(loginId, userDetails.getUser().getRole());
+    }
+
+
+    public UserResponseDto getUserInfo(String token) {
+
+        User user = findUser(token);
+
+        return new UserResponseDto(user);
+    }
+
+    @Transactional
+    public void updateUser(UserUpdateDto userUpdateDto, String token) {
+
+        User user = findUser(token);
+        user.updateInfo(userUpdateDto);
+    }
+
+    private User findUser(String token) {
+        String tokenValue = jwtUtil.getJwtFromString(token);
+        Claims userInfo = jwtUtil.getUserInfoFromToken(tokenValue);
+
+        User findUser = userRepository.findByLoginId(userInfo.getSubject())
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
+        return findUser;
     }
 }

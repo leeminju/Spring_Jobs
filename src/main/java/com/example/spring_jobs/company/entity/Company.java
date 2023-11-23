@@ -1,6 +1,6 @@
 package com.example.spring_jobs.company.entity;
 
-import com.example.spring_jobs.user.UserRoleEnum;
+import com.example.spring_jobs.company.dto.CompanyUpdateDto;
 import com.example.spring_jobs.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -36,4 +36,10 @@ public class Company {
         user.addCompany(this);
     }
 
+    public void updateInfo(CompanyUpdateDto companyUpdateDto) {
+        this.user.updateInfo(companyUpdateDto);
+        this.companyName = companyUpdateDto.getCompanyName();
+        this.location = companyUpdateDto.getLocation();
+        this.industry = companyUpdateDto.getIndustry();
+    }
 }
