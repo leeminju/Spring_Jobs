@@ -72,21 +72,21 @@ public class UserService {
         return jwtUtil.createToken(loginId, userDetails.getUser().getRole());
     }
 
-    public UserResponseDto getUserInfo(String token) {
-        User user = findUser(token);
+    public UserResponseDto getUserInfo(String loginId) {
+        User user = findUser(loginId);
         return new UserResponseDto(user);
     }
 
     @Transactional
-    public void updateUser(UserUpdateDto userUpdateDto, String token) {
-        User user = findUser(token);
+    public void updateUser(UserUpdateDto userUpdateDto, String loginId) {
+        User user = findUser(loginId);
 
          // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
         if(!user.getNickname().equals(userUpdateDto.getNickname())) {
             checkNickname(userUpdateDto.getNickname());
         }
         if(!user.getEmail().equals(userUpdateDto.getEmail())) {
-            checkEmail(user.getEmail());
+            checkEmail(userUpdateDto.getEmail());
         }
         if(!user.getPhone().equals(userUpdateDto.getPhone())) {
             checkPhone(userUpdateDto.getPhone());
@@ -95,11 +95,8 @@ public class UserService {
         user.updateInfo(userUpdateDto);
     }
 
-    private User findUser(String token) {
-        String tokenValue = jwtUtil.getJwtFromString(token);
-        Claims userInfo = jwtUtil.getUserInfoFromToken(tokenValue);
-
-        User findUser = userRepository.findByLoginId(userInfo.getSubject())
+    private User findUser(String loginId) {
+        User findUser = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
         return findUser;
     }

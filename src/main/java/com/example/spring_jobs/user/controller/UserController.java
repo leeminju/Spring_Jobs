@@ -44,13 +44,15 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public UserResponseDto getCompanyInfo(@RequestHeader("Authorization") String token) {
-        return userService.getUserInfo(token);
+    public UserResponseDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String loginId = userDetails.getUsername();
+        return userService.getUserInfo(loginId);
     }
 
     @PatchMapping("/users")
-    public ResponseEntity<CustomResponseEntity> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, @RequestHeader("Authorization") String token) {
-        userService.updateUser(userUpdateDto, token);
+    public ResponseEntity<CustomResponseEntity> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String loginId = userDetails.getUsername();
+        userService.updateUser(userUpdateDto, loginId);
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_USER_UPDATE);
     }
 

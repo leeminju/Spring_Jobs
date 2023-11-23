@@ -61,14 +61,14 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
-    public CompanyResponseDto getCompanyInfo(String token) {
-        Company company = findCompany(token);
+    public CompanyResponseDto getCompanyInfo(String loginId) {
+        Company company = findCompany(loginId);
         return new CompanyResponseDto(company);
     }
 
     @Transactional
-    public void updateCompany(CompanyUpdateDto companyUpdateDto, String token) {
-        Company company = findCompany(token);
+    public void updateCompany(CompanyUpdateDto companyUpdateDto, String loginId) {
+        Company company = findCompany(loginId);
 
         // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
         if (!company.getCompanyName().equals(companyUpdateDto.getCompanyName())) {
@@ -87,11 +87,8 @@ public class CompanyService {
         company.updateInfo(companyUpdateDto);
     }
 
-    private Company findCompany(String token) {
-        String tokenValue = jwtUtil.getJwtFromString(token);
-        Claims userInfo = jwtUtil.getUserInfoFromToken(tokenValue);
-
-        Company findCompany = companyRepository.findByUserLoginId(userInfo.getSubject())
+    private Company findCompany(String loginId) {
+        Company findCompany = companyRepository.findByUserLoginId(loginId)
                 .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
         return findCompany;
     }
