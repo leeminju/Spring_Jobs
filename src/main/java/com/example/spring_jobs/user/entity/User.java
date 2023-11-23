@@ -1,22 +1,13 @@
 package com.example.spring_jobs.user.entity;
 
-<<<<<<< HEAD
 import com.example.spring_jobs.company.dto.CompanyUpdateDto;
 import com.example.spring_jobs.company.entity.Company;
 import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.dto.UserUpdateDto;
-=======
-import com.example.spring_jobs.company.entity.Company;
-import com.example.spring_jobs.user.UserRoleEnum;
->>>>>>> 020bb7348e7957dfec120353e40da65c0b05c74b
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-<<<<<<< HEAD
-import org.hibernate.annotations.DynamicUpdate;
-=======
->>>>>>> 020bb7348e7957dfec120353e40da65c0b05c74b
 
 @Getter
 @Entity(name = "user")

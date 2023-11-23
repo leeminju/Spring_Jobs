@@ -31,7 +31,7 @@ public class UserController {
 
 	private final UserService userService;
 
-	@PostMapping("/signup/users")
+	@PostMapping("/users/signup")
 	public ResponseEntity<CustomResponseEntity> signUpUser(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
 		userService.signup(userSignupRequestDto);
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
@@ -54,7 +54,7 @@ public class UserController {
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_USER_UPDATE);
 	}
 
-	@PatchMapping("/my-info/password")
+	@PatchMapping("/password")
 	public ResponseEntity<CustomResponseEntity> updatePassword(@Valid @RequestBody PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		userService.updatePassword(passwordRequestDto,userDetails.getUser());
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_CHANGE_PASSWORD);

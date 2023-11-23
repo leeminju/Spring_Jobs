@@ -15,22 +15,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequestMapping("/api/posts")
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
 
-    @PostMapping // 채용공고 등록
-    public ResponseEntity<CustomResponseEntity> getPost(@RequestBody PostRequestDTO postRequestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/post") // 채용공고 등록
+    public ResponseEntity<CustomResponseEntity> createPost(@RequestBody PostRequestDTO postRequestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         postService.createPost(postRequestDTO, userDetails.getUser());
 
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_ADD_POST);
     }
 
-    @GetMapping // 채용공고 전체 조회
+    @PatchMapping("/post") // 채용공고 수정
+    public ResponseEntity<CustomResponseEntity> updatePost() {
+        
+        return null;
+    }
+
+    @DeleteMapping("/post") // 채용공고 삭제
+    public ResponseEntity<CustomResponseEntity> deletePost() {
+
+        return null;
+    }
+
+    @GetMapping("/posts") // 채용공고 전체 조회
     public ResponseEntity<List<PostListResponseDTO>> getPostList() {
         List<PostListResponseDTO> response = new ArrayList<>();
         List<List<PostResponseDTO>> dtoMap = postService.getPostMapList();
@@ -42,6 +54,11 @@ public class PostController {
         }
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<PostListResponseDTO> getPost() {
+        return null;
     }
 
 }
