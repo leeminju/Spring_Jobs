@@ -1,15 +1,18 @@
 package com.example.spring_jobs.post.entity;
 
 import com.example.spring_jobs.company.entity.Company;
-import com.example.spring_jobs.post.dto.PostRequestDTO;
 import com.example.spring_jobs.post.Timestamped;
+import com.example.spring_jobs.post.dto.PostRequestDto;
+import com.example.spring_jobs.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity(name = "post")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Post extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,17 +39,18 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String skill;
 
-    @Column(name = "emp_type",nullable = false)
+    @Column(name = "emp_type", nullable = false)
     private String empType;
 
     @Column(nullable = false)
     private String education;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    public Post(PostRequestDTO postRequestDTO) {
+    public Post(PostRequestDto postRequestDTO, User user) {
         this.title = postRequestDTO.getTitle();
         this.image = postRequestDTO.getImage();
         this.contents = postRequestDTO.getContents();
@@ -56,6 +60,6 @@ public class Post extends Timestamped {
         this.skill = postRequestDTO.getSkill();
         this.empType = postRequestDTO.getEmpType();
         this.education = postRequestDTO.getEducation();
-        this.company = postRequestDTO.getCompany();
+        this.company = user.getCompany();
     }
 }

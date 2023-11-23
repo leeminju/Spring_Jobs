@@ -1,12 +1,16 @@
 package com.example.spring_jobs.post.dto;
 
+import com.example.spring_jobs.company.dto.CompanyResponseDto;
+import com.example.spring_jobs.company.entity.Company;
 import com.example.spring_jobs.post.entity.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
-public class PostResponseDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostResponseDto {
     private Long id;
     private String title;
     private String image;
@@ -16,8 +20,9 @@ public class PostResponseDTO {
     private String skill;
     private String empType;
     private String education;
+    private CompanyResponseDto company;
 
-    public PostResponseDTO(Post post) {
+    public PostResponseDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.image = post.getImage();
@@ -27,5 +32,6 @@ public class PostResponseDTO {
         this.skill = post.getSkill();
         this.empType = post.getEmpType();
         this.education = post.getEducation();
+        this.company = new CompanyResponseDto(post.getCompany());
     }
 }

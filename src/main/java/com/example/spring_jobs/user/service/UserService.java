@@ -26,25 +26,30 @@ public class UserService {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtil jwtUtil;
 
+
     public void signup(UserSignupRequestDto userSignupRequestDto) {
         String loginId = userSignupRequestDto.getLoginId();
         String password = passwordEncoder.encode(userSignupRequestDto.getPassword());
 
         // 회원 중복 확인
-        Optional<User> checkLoginId = userRepository.findByLoginId(loginId);
-        if (checkLoginId.isPresent()) {
-            throw new CustomException(StatusEnum.DUPLICATED_LOGIN_ID);
-        }
-
+        checkLoginId(loginId);
+        // 닉네임 중복 확인
+        String nickname = userSignupRequestDto.getNickname();
+        checkNicname(nickname);
         // email 중복확인
         String email = userSignupRequestDto.getEmail();
-        Optional<User> checkEmail = userRepository.findByEmail(email);
-        if (checkEmail.isPresent()) {
-            throw new CustomException(StatusEnum.DUPLICATED_EMAIL);
-        }
+        checkEmail(email);
+        String phone = userSignupRequestDto.getPhone();
+        checkPhone(phone);
 
         // 사용자 등록
-        User user = User.builder().loginId(loginId).password(password).email(email).phone(userSignupRequestDto.getPhone()).role(UserRoleEnum.USER).build();
+        User user = User.builder()
+                .loginId(loginId)
+                .password(password)
+                .email(email)
+                .nickname(nickname)
+                .phone(userSignupRequestDto.getPhone())
+                .role(UserRoleEnum.USER).build();
         userRepository.save(user);
     }
 
@@ -52,10 +57,12 @@ public class UserService {
     public String login(LoginRequestDto loginRequestDto) {
 
         String loginId = loginRequestDto.getLoginId();
-        Optional<User> checkLoginId = userRepository.findByLoginId(loginId);
-        if (checkLoginId.isEmpty()) {
+
+        Optional<User> checkID = userRepository.findByLoginId(loginId);
+        if (checkID.isEmpty()) {
             throw new CustomException(StatusEnum.UsernameNotFoundException);
         }
+
         String password = loginRequestDto.getPassword();
 
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(loginId);
@@ -67,16 +74,25 @@ public class UserService {
     }
 
     public UserResponseDto getUserInfo(String token) {
-
         User user = findUser(token);
-
         return new UserResponseDto(user);
     }
 
     @Transactional
     public void updateUser(UserUpdateDto userUpdateDto, String token) {
-
         User user = findUser(token);
+
+         // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
+        if(!user.getNickname().equals(userUpdateDto.getNickname())) {
+            checkNicname(userUpdateDto.getNickname());
+        }
+        if(!user.getEmail().equals(userUpdateDto.getEmail())) {
+            checkEmail(user.getEmail());
+        }
+        if(!user.getPhone().equals(userUpdateDto.getPhone())) {
+            checkPhone(userUpdateDto.getPhone());
+        }
+
         user.updateInfo(userUpdateDto);
     }
 
@@ -88,6 +104,7 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
         return findUser;
     }
+
     @Transactional
     public void updatePassword(PasswordRequestDto passwordRequestDto, User user) {
         String currentPassword = passwordRequestDto.getCurrentPassword();
@@ -111,5 +128,33 @@ public class UserService {
 
         String newPassword = passwordEncoder.encode(passwordRequestDto.getNewPassword());
         dbUser.changePassword(newPassword);
+    }
+
+    private void checkNicname(String nickname) {
+        Optional<User> checkNickname = userRepository.findByNickname(nickname);
+        if (checkNickname.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_NICKNAME);
+        }
+    }
+
+    private void checkEmail(String email) {
+        Optional<User> checkEmail = userRepository.findByEmail(email);
+        if (checkEmail.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_EMAIL);
+        }
+    }
+
+    private void checkLoginId(String loginId) {
+        Optional<User> checkLoginId = userRepository.findByLoginId(loginId);
+        if (checkLoginId.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_LOGIN_ID);
+        }
+    }
+
+    private void checkPhone(String phone) {
+        Optional<User> checkPhone = userRepository.findByPhone(phone);
+        if (checkPhone.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_PHONENUM);
+        }
     }
 }

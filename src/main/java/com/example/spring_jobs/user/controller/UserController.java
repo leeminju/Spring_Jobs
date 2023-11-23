@@ -29,34 +29,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@PostMapping("/users/signup")
-	public ResponseEntity<CustomResponseEntity> signUpUser(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
-		userService.signup(userSignupRequestDto);
-		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
-	}
+    @PostMapping("/users/signup")
+    public ResponseEntity<CustomResponseEntity> signUpUser(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
+        userService.signup(userSignupRequestDto);
+        return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
+    }
 
-	@PostMapping("/signin")
-	public ResponseEntity<CustomResponseEntity> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-		String token = userService.login(loginRequestDto);
-		return CustomResponseEntity.toResponseEntityWithHeader(StatusEnum.SUCCESS_LOGIN, token);
-	}
+    @PostMapping("/signin")
+    public ResponseEntity<CustomResponseEntity> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        String token = userService.login(loginRequestDto);
+        return CustomResponseEntity.toResponseEntityWithHeader(StatusEnum.SUCCESS_LOGIN, token);
+    }
 
     @GetMapping("/users")
     public UserResponseDto getCompanyInfo(@RequestHeader("Authorization") String token) {
         return userService.getUserInfo(token);
     }
 
-	@PatchMapping("/users")
-	public ResponseEntity<CustomResponseEntity> updateCompany(@Valid @RequestBody UserUpdateDto userUpdateDto, @RequestHeader("Authorization") String token) {
-		userService.updateUser(userUpdateDto, token);
-		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_USER_UPDATE);
-	}
+    @PatchMapping("/users")
+    public ResponseEntity<CustomResponseEntity> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, @RequestHeader("Authorization") String token) {
+        userService.updateUser(userUpdateDto, token);
+        return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_USER_UPDATE);
+    }
 
-	@PatchMapping("/password")
-	public ResponseEntity<CustomResponseEntity> updatePassword(@Valid @RequestBody PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		userService.updatePassword(passwordRequestDto,userDetails.getUser());
-		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_CHANGE_PASSWORD);
-	}
+    @PatchMapping("/password")
+    public ResponseEntity<CustomResponseEntity> updatePassword(@Valid @RequestBody PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.updatePassword(passwordRequestDto, userDetails.getUser());
+        return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_CHANGE_PASSWORD);
+    }
 }

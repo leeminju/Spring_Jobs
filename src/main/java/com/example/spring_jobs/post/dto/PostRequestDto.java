@@ -2,11 +2,9 @@ package com.example.spring_jobs.post.dto;
 
 import com.example.spring_jobs.company.entity.Company;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class PostRequestDTO {
+public class PostRequestDto {
     private Company company;
     private String title;
     private String image;

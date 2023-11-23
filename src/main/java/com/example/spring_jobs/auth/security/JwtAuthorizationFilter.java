@@ -1,6 +1,9 @@
 package com.example.spring_jobs.auth.security;
 
 import com.example.spring_jobs.auth.jwt.JwtUtil;
+import com.example.spring_jobs.common.CustomResponseEntity;
+import com.example.spring_jobs.common.StatusEnum;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,6 +39,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
+                res.setContentType("application/json");
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                res.setCharacterEncoding("utf-8");
+
+                ObjectMapper mapper = new ObjectMapper();
+                String result = mapper.writeValueAsString(CustomResponseEntity.toResponseEntity(StatusEnum.TOKEN_NOT_VALID));
+                res.getWriter().write(result);
                 return;
             }
 

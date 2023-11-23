@@ -32,50 +32,59 @@ public class CompanyService {
         String password = passwordEncoder.encode(companySignupRequestDto.getPassword());
 
         // 회원 중복 확인
-        Optional<User> checkLoginId = userRepository.findByLoginId(loginId);
-        if (checkLoginId.isPresent()) {
-            throw new CustomException(StatusEnum.DUPLICATED_LOGIN_ID);
-        }
-
-        // email 중복확인
-        String email = companySignupRequestDto.getEmail();
-        Optional<User> checkEmail = userRepository.findByEmail(email);
-        if (checkEmail.isPresent()) {
-            throw new CustomException(StatusEnum.DUPLICATED_EMAIL);
-        }
-
+        checkLoginId(loginId);
         //기업명 중복 확인
         String companyName = companySignupRequestDto.getCompanyName();
-        Optional<Company> checkCompanyName = companyRepository.findByCompanyName(companyName);
-        if (checkCompanyName.isPresent()) {
-            throw new CustomException(StatusEnum.DUPLICATED_COMPANY_NAME);
-        }
+        checkCompanyName(companyName);
+        String nickname = companySignupRequestDto.getNickname();
+        checkNicname(nickname);
+        // email 중복확인
+        String email = companySignupRequestDto.getEmail();
+        checkEmail(email);
+
+        String phone = companySignupRequestDto.getPhone();
+        checkPhone(phone);
+
         User user = User.builder()
                 .loginId(loginId)
+                .nickname(nickname)
                 .password(password)
                 .email(email)
-                .phone(companySignupRequestDto.getPhone())
+                .phone(phone)
                 .role(UserRoleEnum.COMPANY).build();
         Company company = Company.builder()
-                        .companyName(companyName)
-                        .industry(companySignupRequestDto.getIndustry())
-                        .location(companySignupRequestDto.getLocation())
-                        .user(user).build();
+                .companyName(companyName)
+                .industry(companySignupRequestDto.getIndustry())
+                .location(companySignupRequestDto.getLocation())
+                .user(user).build();
 
         companyRepository.save(company);
     }
 
     public CompanyResponseDto getCompanyInfo(String token) {
-
         Company company = findCompany(token);
-
         return new CompanyResponseDto(company);
     }
 
     @Transactional
     public void updateCompany(CompanyUpdateDto companyUpdateDto, String token) {
-
         Company company = findCompany(token);
+
+        // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
+        if (!company.getCompanyName().equals(companyUpdateDto.getCompanyName())) {
+            checkCompanyName(companyUpdateDto.getCompanyName());
+        }
+        if (!company.getUser().getNickname().equals(companyUpdateDto.getNickname())) {
+            checkNicname(companyUpdateDto.getNickname());
+        }
+        if (!company.getUser().getEmail().equals(companyUpdateDto.getEmail())) {
+            checkEmail(companyUpdateDto.getEmail());
+        }
+        if (!company.getUser().getPhone().equals(companyUpdateDto.getPhone())) {
+            checkPhone(companyUpdateDto.getPhone());
+        }
+
+
         company.updateInfo(companyUpdateDto);
     }
 
@@ -86,5 +95,40 @@ public class CompanyService {
         Company findCompany = companyRepository.findByUserLoginId(userInfo.getSubject())
                 .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
         return findCompany;
+    }
+
+    private void checkNicname(String nickname) {
+        Optional<User> checkNickname = userRepository.findByNickname(nickname);
+        if (checkNickname.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_NICKNAME);
+        }
+    }
+
+    private void checkEmail(String email) {
+        Optional<User> checkEmail = userRepository.findByEmail(email);
+        if (checkEmail.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_EMAIL);
+        }
+    }
+
+    private void checkCompanyName(String companyName) {
+        Optional<Company> checkCompanyName = companyRepository.findByCompanyName(companyName);
+        if (checkCompanyName.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_COMPANY_NAME);
+        }
+    }
+
+    private void checkLoginId(String loginId) {
+        Optional<User> checkLoginId = userRepository.findByLoginId(loginId);
+        if (checkLoginId.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_LOGIN_ID);
+        }
+    }
+
+    private void checkPhone(String phone) {
+        Optional<User> checkPhone = userRepository.findByPhone(phone);
+        if (checkPhone.isPresent()) {
+            throw new CustomException(StatusEnum.DUPLICATED_PHONENUM);
+        }
     }
 }

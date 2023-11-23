@@ -7,12 +7,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class UserResponseDto {
+    private String nickname;
     private String loginId;
     private String email;
     private String phone;
 
     public UserResponseDto(User user) {
         this.loginId = user.getLoginId();
+        this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.phone = user.getPhone();
     }
