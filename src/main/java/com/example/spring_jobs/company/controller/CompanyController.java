@@ -18,18 +18,18 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-    @PostMapping("/signup/company")
+    @PostMapping("/companies/signup")
 	public ResponseEntity<CustomResponseEntity> signUpCompany(@Valid @RequestBody CompanySignupRequestDto companySignupRequestDto) {
 		companyService.signup(companySignupRequestDto);
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
 	}
 
-	@GetMapping("company-info")
+	@GetMapping("/companies")
 	public CompanyResponseDto getCompnayInfo(@RequestHeader("Authorization") String token) {
 		return companyService.getCompanyInfo(token);
 	}
 
-	@PatchMapping("company-info")
+	@PatchMapping("/companies")
 	public ResponseEntity<CustomResponseEntity> updateCompany(@Valid @RequestBody CompanyUpdateDto companyUpdateDto, @RequestHeader("Authorization") String token) {
 		companyService.updateCompany(companyUpdateDto, token);
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_COMPANY_UPDATE);

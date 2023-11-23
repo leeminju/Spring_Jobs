@@ -20,7 +20,7 @@ public class UserController {
 
 	private final UserService userService;
 
-	@PostMapping("/signup/user")
+	@PostMapping("/users/signup")
 	public ResponseEntity<CustomResponseEntity> signUpUser(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
 		userService.signup(userSignupRequestDto);
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
@@ -32,12 +32,12 @@ public class UserController {
 		return CustomResponseEntity.toResponseEntityWithHeader(StatusEnum.SUCCESS_LOGIN, token);
 	}
 
-    @GetMapping("user-info")
+    @GetMapping("/users")
     public UserResponseDto getCompanyInfo(@RequestHeader("Authorization") String token) {
         return userService.getUserInfo(token);
     }
 
-	@PatchMapping("user-info")
+	@PatchMapping("/users")
 	public ResponseEntity<CustomResponseEntity> updateCompany(@Valid @RequestBody UserUpdateDto userUpdateDto, @RequestHeader("Authorization") String token) {
 		userService.updateUser(userUpdateDto, token);
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_USER_UPDATE);
