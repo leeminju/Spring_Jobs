@@ -26,16 +26,6 @@ public class PostController {
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_ADD_POST);
     }
 
-    @PatchMapping("/post") // 채용공고 수정
-    public ResponseEntity<CustomResponseEntity> updatePost() {
-        return null;
-    }
-
-    @DeleteMapping("/post") // 채용공고 삭제
-    public ResponseEntity<CustomResponseEntity> deletePost() {
-        return null;
-    }
-
     @GetMapping("/posts") // 채용공고 전체 조회
     public List<PostResponseDto> getPosts() {
         return postService.getPosts();
@@ -46,9 +36,21 @@ public class PostController {
         return postService.getMyPosts(userDetails.getUser());
     }
 
-//    @GetMapping("/posts/{id}")
-//    public PostResponseDto getPost(@PathVariable Long id) {
-//        return postService.getPost(id);
-//    }
+    @GetMapping("/posts/{id}")//비회원도 조회 가능하게 구현했기 때문에 경로가 다르다!
+    public PostResponseDto getPost(@PathVariable Long id) {
+        return postService.getPost(id);
+    }
+
+    @PatchMapping("/post/{id}") // 채용공고 수정
+    public ResponseEntity<CustomResponseEntity> updatePost(@PathVariable Long id,@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.updatePost(id, postRequestDto , userDetails.getUser());
+        return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_UPDATE_POST);
+    }
+
+    @DeleteMapping("/post/{id}") // 채용공고 삭제
+    public ResponseEntity<CustomResponseEntity> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.removePost(id, userDetails.getUser());
+        return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_DELETE_POST);
+    }
 
 }

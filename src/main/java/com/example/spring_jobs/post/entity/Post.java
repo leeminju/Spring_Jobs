@@ -62,4 +62,16 @@ public class Post extends Timestamped {
         this.education = postRequestDTO.getEducation();
         this.company = user.getCompany();
     }
+
+    public void update(PostRequestDto postRequestDto) {
+        this.title = postRequestDto.getTitle();
+        this.image = postRequestDto.getImage();
+        this.contents = postRequestDto.getContents();
+        this.job = postRequestDto.getJob();
+        this.deadline = postRequestDto.getDeadline();
+        this.career = postRequestDto.getCareer();
+        this.skill = postRequestDto.getSkill();
+        this.empType = postRequestDto.getEmpType();
+        this.education = postRequestDto.getEducation();
+    }
 }
