@@ -1,5 +1,6 @@
-package com.example.spring_jobs.post;
+package com.example.spring_jobs.post.dto;
 
+import com.example.spring_jobs.post.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
 

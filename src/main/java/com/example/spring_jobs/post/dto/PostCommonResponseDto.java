@@ -1,4 +1,4 @@
-package com.example.spring_jobs.post;
+package com.example.spring_jobs.post.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

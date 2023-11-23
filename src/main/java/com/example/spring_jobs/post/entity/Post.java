@@ -1,6 +1,8 @@
-package com.example.spring_jobs.post;
+package com.example.spring_jobs.post.entity;
 
-import com.example.spring_jobs.company.Company;
+import com.example.spring_jobs.company.entity.Company;
+import com.example.spring_jobs.post.dto.PostRequestDTO;
+import com.example.spring_jobs.post.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity(name = "post")
 @NoArgsConstructor
-public class Post extends Timestamped{
+public class Post extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,6 +56,6 @@ public class Post extends Timestamped{
         this.skill = postRequestDTO.getSkill();
         this.empType = postRequestDTO.getEmpType();
         this.education = postRequestDTO.getEducation();
+        this.company = postRequestDTO.getCompany();
     }
-
 }
