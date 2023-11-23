@@ -1,4 +1,4 @@
-package com.example.spring_jobs.post.Controller;
+package com.example.spring_jobs.post.controller;
 
 import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.common.CustomResponseEntity;
@@ -22,9 +22,7 @@ public class PostController {
 
     @PostMapping("/post") // 채용공고 등록
     public ResponseEntity<CustomResponseEntity> createPost(@RequestBody PostRequestDto postRequestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
         postService.createPost(postRequestDTO, userDetails.getUser());
-
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_ADD_POST);
     }
 
@@ -40,14 +38,17 @@ public class PostController {
 
     @GetMapping("/posts") // 채용공고 전체 조회
     public List<PostResponseDto> getPosts() {
-        List<PostResponseDto> posts=postService.getPosts();
-
-        return posts;
+        return postService.getPosts();
     }
 
-    @GetMapping("/posts/{id}")
-    public ResponseEntity<PostResponseDto> getPost() {
-        return null;
+    @GetMapping("/myposts") // 내가 작성한 채용공고
+    public List<PostResponseDto> getMyPosts(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getMyPosts(userDetails.getUser());
     }
+
+//    @GetMapping("/posts/{id}")
+//    public PostResponseDto getPost(@PathVariable Long id) {
+//        return postService.getPost(id);
+//    }
 
 }

@@ -35,7 +35,7 @@ public class UserService {
         checkLoginId(loginId);
         // 닉네임 중복 확인
         String nickname = userSignupRequestDto.getNickname();
-        checkNicname(nickname);
+        checkNickname(nickname);
         // email 중복확인
         String email = userSignupRequestDto.getEmail();
         checkEmail(email);
@@ -52,7 +52,6 @@ public class UserService {
                 .role(UserRoleEnum.USER).build();
         userRepository.save(user);
     }
-
 
     public String login(LoginRequestDto loginRequestDto) {
 
@@ -84,7 +83,7 @@ public class UserService {
 
          // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
         if(!user.getNickname().equals(userUpdateDto.getNickname())) {
-            checkNicname(userUpdateDto.getNickname());
+            checkNickname(userUpdateDto.getNickname());
         }
         if(!user.getEmail().equals(userUpdateDto.getEmail())) {
             checkEmail(user.getEmail());
@@ -130,7 +129,7 @@ public class UserService {
         dbUser.changePassword(newPassword);
     }
 
-    private void checkNicname(String nickname) {
+    private void checkNickname(String nickname) {
         Optional<User> checkNickname = userRepository.findByNickname(nickname);
         if (checkNickname.isPresent()) {
             throw new CustomException(StatusEnum.DUPLICATED_NICKNAME);

@@ -84,7 +84,6 @@ public class CompanyService {
             checkPhone(companyUpdateDto.getPhone());
         }
 
-
         company.updateInfo(companyUpdateDto);
     }
 

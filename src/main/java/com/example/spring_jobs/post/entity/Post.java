@@ -46,7 +46,7 @@ public class Post extends Timestamped {
     private String education;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
