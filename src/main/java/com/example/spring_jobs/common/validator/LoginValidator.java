@@ -4,9 +4,7 @@ import com.example.spring_jobs.common.annotation.LoginId;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
-
 import java.text.MessageFormat;
-
 @Component
 public class LoginValidator implements ConstraintValidator<LoginId, String> {
 

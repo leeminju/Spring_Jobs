@@ -9,12 +9,20 @@ import com.example.spring_jobs.user.dto.UserResponseDto;
 import com.example.spring_jobs.user.dto.PasswordRequestDto;
 import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.dto.UserUpdateDto;
+import com.example.spring_jobs.common.CustomResponseEntity;
+import com.example.spring_jobs.common.StatusEnum;
+import com.example.spring_jobs.user.dto.LoginRequestDto;
+import com.example.spring_jobs.user.dto.UserSignupRequestDto;
 import com.example.spring_jobs.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
@@ -23,7 +31,7 @@ public class UserController {
 
 	private final UserService userService;
 
-	@PostMapping("/users/signup")
+	@PostMapping("/signup/users")
 	public ResponseEntity<CustomResponseEntity> signUpUser(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto) {
 		userService.signup(userSignupRequestDto);
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
