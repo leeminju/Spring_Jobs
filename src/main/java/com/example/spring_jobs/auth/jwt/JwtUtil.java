@@ -61,6 +61,11 @@ public class JwtUtil {
         return null;
     }
 
+    // String 에서 JWT 가져오기
+    public String getJwtFromString(String request) {
+        return request.substring(7);
+    }
+
     // 토큰 검증
     public boolean validateToken(String token) {
         try {

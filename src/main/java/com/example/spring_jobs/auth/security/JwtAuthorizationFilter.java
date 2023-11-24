@@ -1,8 +1,8 @@
 package com.example.spring_jobs.auth.security;
 
 import com.example.spring_jobs.auth.jwt.JwtUtil;
+import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
-import com.example.spring_jobs.common.exception.CustomException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -17,9 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -41,7 +39,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
-                throw new CustomException(StatusEnum.TOKEN_NOT_VALID);
+                res.setContentType("application/json");
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                res.setCharacterEncoding("utf-8");
+
+                ObjectMapper mapper = new ObjectMapper();
+                String result = mapper.writeValueAsString(CustomResponseEntity.toResponseEntity(StatusEnum.TOKEN_NOT_VALID));
+                res.getWriter().write(result);
+                return;
             }
 
             Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
