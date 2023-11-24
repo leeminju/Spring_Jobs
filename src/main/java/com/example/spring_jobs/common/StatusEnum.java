@@ -12,6 +12,7 @@ public enum StatusEnum {
     POST_NOT_MATCHED(HttpStatus.UNAUTHORIZED, "POST_NOT_MATCHED", "게시글을 작성한 사용자가 아닙니다."),
     SUCCESS_JOIN(HttpStatus.CREATED, "SUCCESS_JOIN", "회원가입에 성공하였습니다."),
     SUCCESS_LOGIN(HttpStatus.OK, "SUCCESS_LOGIN", "로그인에 성공하였습니다."),
+    SUCCESS_LOGOUT(HttpStatus.OK, "SUCCESS_LOGOUT", "로그아웃하였습니다."),
     SUCCESS_USER_UPDATE(HttpStatus.OK, "SUCCESS_USER_UPDATE", "개인 회원 정보 수정에 성공하였습니다."),
     SUCCESS_COMPANY_UPDATE(HttpStatus.OK, "SUCCESS_COMPANY_UPDATE", "기업 회원 정보 수정에 성공하였습니다."),
     SUCCESS_CHANGE_PASSWORD(HttpStatus.OK, "SUCCESS_CHANGE_PASSWORD", "비밀번호가 변경되었습니다"),
