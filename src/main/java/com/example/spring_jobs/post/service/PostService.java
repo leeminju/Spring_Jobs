@@ -21,7 +21,6 @@ public class PostService {
     private final UserRepository userRepository;
 
     public void createPost(PostRequestDto postRequestDTO, User user) {
-        checkRole(user);
         Post post = new Post(postRequestDTO, user);
 
         postRepository.save(post);
@@ -46,7 +45,6 @@ public class PostService {
 
     @Transactional
     public void updatePost(Long id, PostRequestDto postRequestDto, User user) {
-        checkRole(user);
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(StatusEnum.POST_NOT_FOUND));
 
@@ -58,7 +56,6 @@ public class PostService {
     }
 
     public void removePost(Long id, User user) {
-        checkRole(user);
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(StatusEnum.POST_NOT_FOUND));
 
@@ -67,11 +64,5 @@ public class PostService {
         }
 
         postRepository.delete(post);
-    }
-
-    void checkRole(User user) {
-        if (!user.getRole().getAuthority().equals("COMPANY")) {
-            throw new CustomException(StatusEnum.ROLE_NOT_COMPANY);
-        }
     }
 }
