@@ -5,10 +5,15 @@ import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.user.dto.*;
 import com.example.spring_jobs.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,6 +34,19 @@ public class UserController {
         String token = userService.login(loginRequestDto);
         return CustomResponseEntity.toResponseEntityWithHeader(StatusEnum.SUCCESS_LOGIN, token);
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<CustomResponseEntity> logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            System.out.println(authentication);
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
+        return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_LOGOUT);
+    }
+
 
     @GetMapping("/users")
     public UserResponseDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
