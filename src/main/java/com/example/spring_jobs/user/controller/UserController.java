@@ -3,26 +3,13 @@ package com.example.spring_jobs.user.controller;
 import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
-import com.example.spring_jobs.company.dto.CompanyUpdateDto;
-import com.example.spring_jobs.user.dto.LoginRequestDto;
-import com.example.spring_jobs.user.dto.UserResponseDto;
-import com.example.spring_jobs.user.dto.PasswordRequestDto;
-import com.example.spring_jobs.user.dto.UserSignupRequestDto;
-import com.example.spring_jobs.user.dto.UserUpdateDto;
-import com.example.spring_jobs.common.CustomResponseEntity;
-import com.example.spring_jobs.common.StatusEnum;
-import com.example.spring_jobs.user.dto.LoginRequestDto;
-import com.example.spring_jobs.user.dto.UserSignupRequestDto;
+import com.example.spring_jobs.user.dto.*;
 import com.example.spring_jobs.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
@@ -45,14 +32,14 @@ public class UserController {
 
     @GetMapping("/users")
     public UserResponseDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String loginId = userDetails.getUsername();
-        return userService.getUserInfo(loginId);
+        Long userId = userDetails.getUser().getId();
+        return userService.getUserInfo(userId);
     }
 
     @PatchMapping("/users")
     public ResponseEntity<CustomResponseEntity> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String loginId = userDetails.getUsername();
-        userService.updateUser(userUpdateDto, loginId);
+        Long userId = userDetails.getUser().getId();
+        userService.updateUser(userUpdateDto, userId);
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_USER_UPDATE);
     }
 

@@ -9,7 +9,6 @@ import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.dto.*;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -72,33 +71,30 @@ public class UserService {
         return jwtUtil.createToken(loginId, userDetails.getUser().getRole());
     }
 
-    public UserResponseDto getUserInfo(String loginId) {
-        User user = findUser(loginId);
-        return new UserResponseDto(user);
+    public UserResponseDto getUserInfo(Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
+
+        return new UserResponseDto(findUser);
     }
 
     @Transactional
-    public void updateUser(UserUpdateDto userUpdateDto, String loginId) {
-        User user = findUser(loginId);
+    public void updateUser(UserUpdateDto userUpdateDto, Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
 
          // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
-        if(!user.getNickname().equals(userUpdateDto.getNickname())) {
+        if(!findUser.getNickname().equals(userUpdateDto.getNickname())) {
             checkNickname(userUpdateDto.getNickname());
         }
-        if(!user.getEmail().equals(userUpdateDto.getEmail())) {
+        if(!findUser.getEmail().equals(userUpdateDto.getEmail())) {
             checkEmail(userUpdateDto.getEmail());
         }
-        if(!user.getPhone().equals(userUpdateDto.getPhone())) {
+        if(!findUser.getPhone().equals(userUpdateDto.getPhone())) {
             checkPhone(userUpdateDto.getPhone());
         }
 
-        user.updateInfo(userUpdateDto);
-    }
-
-    private User findUser(String loginId) {
-        User findUser = userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
-        return findUser;
+        findUser.updateInfo(userUpdateDto);
     }
 
     @Transactional
