@@ -29,7 +29,12 @@ public enum StatusEnum {
     NotEqualsCheckPassWordException(HttpStatus.BAD_REQUEST, "PASSWORD_CHECK_FAIL", "새 비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     EqualsCURRENTPassWordException(HttpStatus.BAD_REQUEST, "PASSWORD_EQUALS_CURRENT", "현재 비밀번호와 동일합니다."),
     UsernameNotFoundException(HttpStatus.BAD_REQUEST, "USER_NOT_FOUND", "등록된 아이디가 존재하지 않습니다."),
-    TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, "TOKEN_NOT_VALID", "토큰이 유효하지 않습니다.");
+    TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, "TOKEN_NOT_VALID", "토큰이 유효하지 않습니다."),
+    FAIL_CREATE_MESSAGE(HttpStatus.BAD_REQUEST, "FAIL_CREATE_MESSAGE", "인증 코드 메일 생성 실패 했습니다."),
+    FAIL_SEND_EMAIL(HttpStatus.BAD_REQUEST, "FAIL_SEND_EMAIL", "인증 코드 메일이 전송 실패 했습니다."),
+    FAIL_EMAIL_CONFIRM(HttpStatus.UNAUTHORIZED, "FAIL_EMAIL_CONFIRM", "이메일 인증을 하지 않았습니다."),
+    SENDER_UNMATCHED(HttpStatus.BAD_REQUEST, "SENDER_UNMATCHED", "보내는 사람이 잘못 설정 되었습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String description;

@@ -40,25 +40,29 @@ public class CompanyService {
         checkNicname(nickname);
         // email 중복확인
         String email = companySignupRequestDto.getEmail();
-        checkEmail(email);
+        //   checkEmail(email);
 
         String phone = companySignupRequestDto.getPhone();
         checkPhone(phone);
 
-        User user = User.builder()
-                .loginId(loginId)
-                .nickname(nickname)
-                .password(password)
-                .email(email)
-                .phone(phone)
-                .role(UserRoleEnum.COMPANY).build();
-        Company company = Company.builder()
-                .companyName(companyName)
-                .industry(companySignupRequestDto.getIndustry())
-                .location(companySignupRequestDto.getLocation())
-                .user(user).build();
+        if (companySignupRequestDto.isConfirmed()) {
+            User user = User.builder()
+                    .loginId(loginId)
+                    .nickname(nickname)
+                    .password(password)
+                    .email(email)
+                    .phone(phone)
+                    .role(UserRoleEnum.COMPANY).build();
+            Company company = Company.builder()
+                    .companyName(companyName)
+                    .industry(companySignupRequestDto.getIndustry())
+                    .location(companySignupRequestDto.getLocation())
+                    .user(user).build();
 
-        companyRepository.save(company);
+            companyRepository.save(company);
+        } else {
+            throw new CustomException(StatusEnum.FAIL_EMAIL_CONFIRM);
+        }
     }
 
     public CompanyResponseDto getCompanyInfo(String loginId) {

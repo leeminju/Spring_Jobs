@@ -23,4 +23,5 @@ public class UserSignupRequestDto {
 	private String email;
 	@Phone
 	private String phone;
+	private boolean confirmed;
 }

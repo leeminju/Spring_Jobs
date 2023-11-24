@@ -48,12 +48,11 @@ public class UserController {
         return CustomResponseEntity.toResponseEntityWithHeader(StatusEnum.SUCCESS_LOGIN, token);
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/users/logout")
     public ResponseEntity<CustomResponseEntity> logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
-            System.out.println(authentication);
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
 

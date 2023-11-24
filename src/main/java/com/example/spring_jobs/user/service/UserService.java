@@ -36,21 +36,26 @@ public class UserService {
         // 닉네임 중복 확인
         String nickname = userSignupRequestDto.getNickname();
         checkNickname(nickname);
-        // email 중복확인
-        String email = userSignupRequestDto.getEmail();
-        checkEmail(email);
+
         String phone = userSignupRequestDto.getPhone();
         checkPhone(phone);
 
-        // 사용자 등록
-        User user = User.builder()
-                .loginId(loginId)
-                .password(password)
-                .email(email)
-                .nickname(nickname)
-                .phone(userSignupRequestDto.getPhone())
-                .role(UserRoleEnum.USER).build();
-        userRepository.save(user);
+        String email = userSignupRequestDto.getEmail();
+
+        if (userSignupRequestDto.isConfirmed()) {
+            // 사용자 등록
+            User user = User.builder()
+                    .loginId(loginId)
+                    .password(password)
+                    .email(email)
+                    .nickname(nickname)
+                    .phone(userSignupRequestDto.getPhone())
+                    .role(UserRoleEnum.USER).build();
+            userRepository.save(user);
+        } else {
+            throw new CustomException(StatusEnum.FAIL_EMAIL_CONFIRM);
+        }
+
     }
 
     public String login(LoginRequestDto loginRequestDto) {
@@ -81,14 +86,14 @@ public class UserService {
     public void updateUser(UserUpdateDto userUpdateDto, String loginId) {
         User user = findUser(loginId);
 
-         // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
-        if(!user.getNickname().equals(userUpdateDto.getNickname())) {
+        // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
+        if (!user.getNickname().equals(userUpdateDto.getNickname())) {
             checkNickname(userUpdateDto.getNickname());
         }
-        if(!user.getEmail().equals(userUpdateDto.getEmail())) {
+        if (!user.getEmail().equals(userUpdateDto.getEmail())) {
             checkEmail(userUpdateDto.getEmail());
         }
-        if(!user.getPhone().equals(userUpdateDto.getPhone())) {
+        if (!user.getPhone().equals(userUpdateDto.getPhone())) {
             checkPhone(userUpdateDto.getPhone());
         }
 
