@@ -4,9 +4,12 @@ import com.example.spring_jobs.common.CustomResponseEntity;
 import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.like.dto.request.LikeRequestDto;
 import com.example.spring_jobs.like.service.LikeService;
+import com.example.spring_jobs.user.UserRoleEnum;
+import com.example.spring_jobs.user.UserRoleEnum.Authority;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +22,7 @@ public class LikeController {
 
     private final LikeService likeService;
 
+    @Secured(Authority.USER)
     @PostMapping("/like")
     public ResponseEntity<CustomResponseEntity> like(@Valid @RequestBody LikeRequestDto likeRequestDto){
         if(likeService.like(likeRequestDto) != null){
