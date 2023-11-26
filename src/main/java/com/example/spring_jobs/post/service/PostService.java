@@ -23,7 +23,6 @@ public class PostService {
 
     public void createPost(PostRequestDto postRequestDTO, User user) {
         Post post = new Post(postRequestDTO, user);
-
         postRepository.save(post);
     }
 

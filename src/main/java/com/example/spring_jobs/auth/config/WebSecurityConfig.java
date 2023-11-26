@@ -14,7 +14,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+<<<<<<<HEAD
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+=======
+        >>>>>>>4bed1ccfd53bd9fc952f4efa424cc61913c3b1a7
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -47,7 +50,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public JPAQueryFactory jpaQueryFactory(EntityManager em){
+    public JPAQueryFactory jpaQueryFactory(EntityManager em) {
         return new JPAQueryFactory(em);
     }
 
@@ -64,7 +67,9 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
-                        .requestMatchers("/page/**").permitAll()
+                        .requestMatchers("/login-page").permitAll()
+                        .requestMatchers("/signup-page").permitAll()
+                        .requestMatchers("/post-page").permitAll()
                         .requestMatchers("/api/users/signup").permitAll()
                         .requestMatchers("/api/companies/signup").permitAll()
                         .requestMatchers("/api/posts/**").permitAll()

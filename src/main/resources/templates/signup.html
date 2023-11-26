@@ -148,7 +148,7 @@
                 data: JSON.stringify(data),
                 success: function (response) {
                     alert(response['message']);
-                    window.location.href = '/page/login-page';
+                    window.location.href = '/login-page';
                 },
                 error(error, status, request) {
                     alert(error['responseJSON']['message']);
@@ -295,10 +295,17 @@
         <input type="text" id="location" placeholder="위치">
     </div>
 
-    <div>
-        <label for="company-phone">Industry</label>
-        <input type="text" id="industry" placeholder="산업군">
+
+    <div class="input-group mb-3">
+        <label class="input-group-text">산업군</label>
+        <select class="form-select" id="industry">
+            <option selected>산업군 선택</option>
+            <option value="서비스업">서비스업</option>
+            <option value="제조업">제조업</option>
+            <option value="IT/웹/통신">IT/웹/통신</option>
+        </select>
     </div>
+
     <button onclick="companySignup()" id="company-sign-up-btn">회원 가입</button>
 </div>
 <br>
@@ -306,7 +313,7 @@
 <button id="login-id-btn" onclick="location.href='/login-page'">
     로그인
 </button>
-</button>
+    </button>
 </span>
 </body>
 </html>
