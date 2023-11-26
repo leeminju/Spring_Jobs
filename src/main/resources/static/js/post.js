@@ -47,13 +47,23 @@ function getPost(id) {
             $('#industry').text(industry);
             $('#location').text(location);
 
+            if($('#owner').val() === company['loginId']) {
+                let html = `<div>
+                                    <button class="btn btn-primary" onclick="location.href='/posts/${response["id"]}/edit'">수정</button>
+                                </div>
+                                `
+                $('#title').append(html);
+            }
+
             if(commentList.length === 0){
                 $("#commentTitle").text("댓글이 없습니다.");
             }else{
                 for (i = 0; i < commentList.length; i++) {
-                    let comment = commentList[i];
+                    let comment = commentList[i].comment;
+                    let name = commentList[i].nickname;
+                    let userId = commentList[i].userId;
                     $("#commentTitle").text("댓글 " + commentList.length + "개");
-                    let tempHtml = make_commentHtml(comment);
+                    let tempHtml = make_commentHtml(comment, name, userId);
                     $('#commentList').append(tempHtml);
                 }
             }
@@ -104,8 +114,11 @@ function like(id){
 }
 
 
-function make_commentHtml(comment) {
+function make_commentHtml(comment, nickname, userId) {
     return `<ul class="list-group">
-                  <li class="list-group-item">${comment}</li>
-                </ul>`;
+                  <li class="list-group-item" value="${userId}">${comment}(작성자 : ${nickname})
+                      <button type="button" class="btn btn-outline-primary">수정</button>
+                      <button type="button" class="btn btn-outline-danger">삭제</button>
+                  </li>
+            </ul>`;
 }

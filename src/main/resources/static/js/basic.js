@@ -36,12 +36,14 @@ function authorizationCheck() {
                 if (role === "COMPANY") {
                     $('#post-btn').show();
                     $('#my_tap').show();
-                    //$('#mypage-btn').attr(onclick,"location.href='/company'");
+                    $('#mypage').attr("onclick","location.href='/company'");
+                    let html = `<input id="owner" type="hidden" value=${res["loginId"]} />`;
+                    $('body').append(html);
                     getMyPosts();
                 } else {
                     $('#post-btn').hide();
                     $('#my_tap').hide();
-                   // $('#mypage-btn').attr(onclick,"location.href='/user'");
+                    $('#mypage').attr("onclick","location.href='/user'");
                 }
             })
             .fail(function (jqXHR, textStatus) {
