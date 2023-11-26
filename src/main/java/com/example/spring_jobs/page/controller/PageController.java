@@ -26,4 +26,10 @@ public class PageController {
     public String postPage() {
         return "post";
     }
+
+    @GetMapping("/password")
+    public String updatePasswordForm() {
+        return "passwordForm";
+    }
+
 }
