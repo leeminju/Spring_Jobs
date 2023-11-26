@@ -1,6 +1,5 @@
 package com.example.spring_jobs.company.dto;
 
-import com.example.spring_jobs.company.IndustryEnum;
 import com.example.spring_jobs.company.entity.Company;
 import com.example.spring_jobs.user.entity.User;
 import lombok.AllArgsConstructor;
