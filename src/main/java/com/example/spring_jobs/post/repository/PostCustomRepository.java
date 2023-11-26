@@ -21,8 +21,8 @@ public class PostCustomRepository {
     public Optional<Post> findPostAndCommentAndLike(Long id){
         return Optional.ofNullable(factory.select(qPost)
                 .from(qPost)
-                .innerJoin(qPost.commentList, qComment)
-                .innerJoin(qPost.likeList, qLike)
+                .leftJoin(qPost.commentList, qComment)
+                .leftJoin(qPost.likeList, qLike)
                 .distinct()
                 .fetchJoin()
                 .where(qPost.id.eq(id))
