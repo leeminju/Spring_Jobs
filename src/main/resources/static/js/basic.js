@@ -16,6 +16,7 @@ function authorizationCheck() {
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             jqXHR.setRequestHeader('Authorization', auth);
         });
+
         //로그인
         $('#sign-up-btn').hide();
         $('#sign-in-btn').hide();
@@ -35,10 +36,12 @@ function authorizationCheck() {
                 if (role == "COMPANY") {
                     $('#post-btn').show();
                     $('#my_tap').show();
+                    //$('#mypage-btn').attr(onclick,"location.href='/company'");
                     getMyPosts();
                 } else {
                     $('#post-btn').hide();
                     $('#my_tap').hide();
+                   // $('#mypage-btn').attr(onclick,"location.href='/user'");
                 }
 
 

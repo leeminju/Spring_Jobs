@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CompanyResponseDto {
+    private String loginId;
     private String nickname;
     private String email;
     private String phone;
@@ -18,6 +19,7 @@ public class CompanyResponseDto {
 
     public CompanyResponseDto(Company company) {
         User user = company.getUser();
+        this.loginId = user.getLoginId();
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.phone = user.getPhone();
