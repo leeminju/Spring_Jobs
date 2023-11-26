@@ -13,13 +13,18 @@ public class PageController {
     }
 
 
-    @GetMapping("/login-page")
+    @GetMapping("/page/login-page")
     public String loginPage() {
         return "login";
     }
 
-    @GetMapping("/signup-page")
+    @GetMapping("/page/signup-page")
     public String signupPage() {
         return "signup";
+    }
+
+    @GetMapping("/page/my-page")
+    public String myPage() {
+        return "mypage";
     }
 }

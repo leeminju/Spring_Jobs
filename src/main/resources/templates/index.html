@@ -11,17 +11,22 @@
     <script src="/js/basic.js"></script>
 </head>
 <body>
-<button id="sign-up-btn" onclick="location.href='/signup-page'">
-    회원 가입하기
-</button>
-<button id="sign-in-btn" onclick="location.href='/login-page'">
-    로그인하기
-</button>
-<button id="mypage">
-    <span id="nickname"></span>님의 마이 페이지
-</button>
-<button id="logout-btn" onclick="logout()">
-    로그아웃
-</button>
+
+<div class="main_header">
+    <button id="sign-up-btn" onclick="location.href='/page/signup-page'">
+        회원 가입하기
+    </button>
+    <button id="sign-in-btn" onclick="location.href='/page/login-page'">
+        로그인하기
+    </button>
+    <button id="mypage" onclick="location.href='/page/my-page'">
+        <span id="nickname"></span>님의 마이 페이지
+    </button>
+    <button id="logout-btn" onclick="logout()">
+        로그아웃
+    </button>
+</div>
+
+
 </body>
 </html>

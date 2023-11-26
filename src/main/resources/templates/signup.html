@@ -148,7 +148,7 @@
                 data: JSON.stringify(data),
                 success: function (response) {
                     alert(response['message']);
-                    window.location.href = '/login-page';
+                    window.location.href = '/page/login-page';
                 },
                 error(error, status, request) {
                     alert(error['responseJSON']['message']);

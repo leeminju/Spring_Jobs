@@ -49,8 +49,7 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
-                        .requestMatchers("/login-page").permitAll() // 로그인 페이지 요청 허가
-                        .requestMatchers("/signup-page").permitAll() // 회원가입 페이지 요청 허가
+                        .requestMatchers("/page/**").permitAll()
                         .requestMatchers("/api/users/signup").permitAll()
                         .requestMatchers("/api/companies/signup").permitAll()
                         .requestMatchers("/api/posts/**").permitAll()
