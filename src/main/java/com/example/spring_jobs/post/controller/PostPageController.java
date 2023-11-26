@@ -2,6 +2,7 @@ package com.example.spring_jobs.post.controller;
 
 import com.example.spring_jobs.auth.security.UserDetailsImpl;
 import com.example.spring_jobs.post.dto.PostRequestDto;
+import com.example.spring_jobs.post.dto.PostResponseDto;
 import com.example.spring_jobs.post.entity.Post;
 import com.example.spring_jobs.post.service.PostService;
 import com.example.spring_jobs.user.dto.UserResponseDto;
@@ -27,24 +28,27 @@ public class PostPageController {
     }
 
     @PostMapping("/post")
-    public String createPost(@ModelAttribute PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+    public String createPost(@ModelAttribute PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.createPost(requestDto, userDetails.getUser());
         return "redirect:/";
     }
 
     @GetMapping("/posts/{postId}/edit")
-    public String updatePostForm(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+    public String updatePostForm(@PathVariable Long postId, Model model) {
+        PostResponseDto post = postService.getPost(postId);
+        model.addAttribute("post", post);
         return "post/postUpdateForm";
     }
 
-    @PostMapping("/posts/{id}/edit")
-    public String updatePost(@Valid @ModelAttribute UserUpdateDto userUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return "redirect:/";
+    @PostMapping("/posts/{postId}/edit")
+    public String updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.updatePost(postId,requestDto,userDetails.getUser());
+        return "redirect:/post-page?{postId}";
     }
 
-    @PostMapping("/posts/{id}/delete")
-    private void deletePost(UserDetailsImpl userDetails) {
-
+    @PostMapping("/posts/{postId}/delete")
+    private String deletePost(@PathVariable Long postId, UserDetailsImpl userDetails) {
+        postService.removePost(postId, userDetails.getUser());
+        return "redirect:/";
     }
 }
