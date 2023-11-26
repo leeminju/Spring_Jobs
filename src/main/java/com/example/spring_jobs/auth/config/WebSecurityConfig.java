@@ -5,6 +5,8 @@ import com.example.spring_jobs.auth.jwt.JwtUtil;
 import com.example.spring_jobs.auth.security.CustomAccessDeniedHandler;
 import com.example.spring_jobs.auth.security.JwtAuthorizationFilter;
 import com.example.spring_jobs.auth.security.UserDetailsServiceImpl;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +44,11 @@ public class WebSecurityConfig {
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
+    }
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory(EntityManager em){
+        return new JPAQueryFactory(em);
     }
 
     @Bean
