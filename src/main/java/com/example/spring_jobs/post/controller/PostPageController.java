@@ -5,15 +5,14 @@ import com.example.spring_jobs.post.dto.PostRequestDto;
 import com.example.spring_jobs.post.dto.PostResponseDto;
 import com.example.spring_jobs.post.entity.Post;
 import com.example.spring_jobs.post.service.PostService;
-import com.example.spring_jobs.user.dto.UserResponseDto;
-import com.example.spring_jobs.user.dto.UserUpdateDto;
-import com.example.spring_jobs.user.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor

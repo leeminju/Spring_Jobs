@@ -33,7 +33,7 @@ function authorizationCheck() {
             .done(function (res, status, xhr) {
                 $('#nickname').text(res['nickname']);
                 let role = res['role'];
-                if (role == "COMPANY") {
+                if (role === "COMPANY") {
                     $('#post-btn').show();
                     $('#my_tap').show();
                     $('#mypage').attr("onclick","location.href='/company'");
@@ -45,8 +45,6 @@ function authorizationCheck() {
                     $('#my_tap').hide();
                     $('#mypage').attr("onclick","location.href='/user'");
                 }
-
-
             })
             .fail(function (jqXHR, textStatus) {
                 logout();

@@ -21,10 +21,10 @@ public class LikeService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public Long like(LikeRequestDto likeRequestDto){
+    public Long like(Long postId, Long userId){
 
-        Post post = postRepository.findById(likeRequestDto.getPostId()).orElseThrow(() ->new CustomException(StatusEnum.POST_NOT_FOUND));
-        User user = userRepository.findById(likeRequestDto.getUserId()).orElseThrow(() -> new CustomException(StatusEnum.USER_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() ->new CustomException(StatusEnum.POST_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(StatusEnum.USER_NOT_FOUND));
 
         Optional<Like> like = likeRepository.findByUserAndPost(user, post);
 
@@ -34,5 +34,14 @@ public class LikeService {
             return likeRepository.save(Like.builder().post(post).user(user).build()).getId();
         }
         return null;
+    }
+
+    public boolean getMyLike(Long postId, Long userId){
+        Post post = postRepository.findById(postId).orElseThrow(() ->new CustomException(StatusEnum.POST_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(StatusEnum.USER_NOT_FOUND));
+
+        Optional<Like> like = likeRepository.findByUserAndPost(user, post);
+
+        return like.isPresent();
     }
 }
