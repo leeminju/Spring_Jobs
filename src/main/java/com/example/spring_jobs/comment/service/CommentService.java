@@ -36,7 +36,7 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(StatusEnum.COMMENT_NOT_FOUND));
 
         if (!findComment.getPost().getId().equals(postId)) {
-            throw new CustomException(StatusEnum.COMMENT_NOT_FOUND);
+            throw new CustomException(StatusEnum.POST_NOT_FOUND);
         }
 
         if (!findComment.getUser().getId().equals(userId)) {
