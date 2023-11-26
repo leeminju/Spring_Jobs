@@ -3,6 +3,7 @@ package com.example.spring_jobs.page.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,8 +24,4 @@ public class PageController {
         return "signup";
     }
 
-    @GetMapping("/page/my-page")
-    public String myPage() {
-        return "mypage";
-    }
 }
