@@ -37,6 +37,8 @@ function authorizationCheck() {
                     $('#post-btn').show();
                     $('#my_tap').show();
                     $('#mypage').attr("onclick","location.href='/company'");
+                    let html = `<input id="owner" type="hidden" value=${res["loginId"]} />`;
+                    $('body').append(html);
                     getMyPosts();
                 } else {
                     $('#post-btn').hide();

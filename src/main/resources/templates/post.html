@@ -42,6 +42,7 @@
                 let location = company['location'];
                 let industry = company['industry'];
 
+
                 $('title').text(title);
                 $('#title').text(title);
                 $('#image').attr("src", image);
@@ -52,12 +53,20 @@
                 $('#empType').text(empType);
                 $('#education').text(education);
 
-
                 $('#companyName').text(companyName);
                 $('#email').text(email);
                 $('#phone').text(phone);
                 $('#industry').text(industry);
                 $('#location').text(location);
+
+                if($('#owner').val() === company['loginId']) {
+                    let html = `<div>
+                                    <button class="btn btn-primary" onclick="location.href='/posts/${response["id"]}/edit'">수정</button>
+                                </div>
+                                `
+                    $('#title').append(html);
+                }
+
             },
             error(error, status, request) {
                 console.log(error);
