@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 가입 페이지</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+</head>
+
+<script>
+    let auth_code;
+    let confirmed = false;
+
+    let kind = {
+        company: "COMPANY",
+        user: "USER"
+    };
+    let role;
+
+    $(document).ready(function () {
+        role = kind.user;
+
+        $('#user-form').show();
+        $('#company-form').hide();
+    });
+
+    function showUserform() {
+        if (role === kind.company) {
+            role = kind.user;
+            $('#user-form').show();
+            $('#company-form').hide().find('input[type=text]', 'input[type=password]', 'input[type=email]').each(function () {
+                $(this).val('');
+            });
+            confirmed = false;
+            auth_code = null;
+
+            $('#email').attr("disabled", false).val(null);// 가능
+            $('#send-btn').attr("disabled", false);// 가능
+            $('#input_code').attr("disabled", true).val(null);
+            $('#auth-btn').attr("disabled", true);
+
+        }
+    }
+
+    function showCompanyform() {
+        if (role === kind.user) {
+            role = kind.company;
+            $('#company-form').show();
+            $('#user-form').hide().find('input[type=text]', 'input[type=password]', 'input[type=email]').each(function () {
+                $(this).val('');
+            });
+
+            confirmed = false;
+            auth_code = null;
+
+            $('#company-email').attr("disabled", false).val(null);// 가능
+            $('#company-send-btn').attr("disabled", false);// 가능
+            $('#company-input_code').attr("disabled", true).val(null);
+            $('#company-auth-btn').attr("disabled", true);
+        }
+    }
+
+    function sendMail() {
+        let email;
+        if (role === kind.user) {
+            email = $('#email').val();
+        } else {
+            email = $('#company-email').val();
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "api/email",
+            data: {
+                "email": email
+            },
+            success: function (data) {
+                alert("해당 이메일로 인증번호 발송이 완료되었습니다.\n 확인부탁드립니다.")
+                if (role === kind.user) {
+                    $('#email').attr("disabled", true);// 사용 안함
+                    $('#send-btn').attr("disabled", true);// 사용 안함
+                    $('#input_code').attr("disabled", false);//사용함.
+                    $('#auth-btn').attr("disabled", false);// 사용함.
+                } else {
+                    $('#company-email').attr("disabled", true);// 사용 안함
+                    $('#company-send-btn').attr("disabled", true);// 사용 안함
+                    $('#company-input_code').attr("disabled", false);//사용함.
+                    $('#company-auth-btn').attr("disabled", false);// 사용함.
+                }
+                auth_code = data;
+
+            }, error(error, status, request) {
+                alert(error['responseJSON']['message']);
+            }
+        })
+    }
+
+    // 이메일 인증번호 체크 함수
+    function checkCode() {
+        let input_code;
+        if (role === kind.user) {
+            input_code = $('#input_code').val();
+        } else {
+            input_code = $('#company-input_code').val();
+        }
+
+        if (auth_code !== input_code) {
+            alert("잘못된 인증번호 입니다.!");
+        } else {
+            alert("인증되었습니다!");
+
+            if (role === kind.user) {
+                $('#input_code').attr("disabled", true);//사용 안함.
+                $('#auth-btn').attr("disabled", true);//사용 안함
+            } else {
+                $('#company-input_code').attr("disabled", true);//사용 안함.
+                $('#company-auth-btn').attr("disabled", true);//사용 안함
+            }
+            confirmed = true;
+        }
+    }
+
+    function userSignup() {
+        if (!confirmed) {
+            alert("이메일 인증이 되지 않았습니다!");
+            return;
+        }
+        let loginID = $('#login_id').val();
+        let password = $('#password').val();
+        let nickname = $('#nickname').val();
+        let email = $('#email').val();
+        let phone = $('#phone').val();
+
+        let data = {
+            'loginId': loginID,
+            'password': password,
+            'nickname': nickname,
+            'email': email,
+            'phone': phone,
+            'confirmed': confirmed
+        };
+
+        $.ajax({
+                type: 'POST',
+                url: '/api/users/signup',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert(response['message']);
+                    window.location.href = '/page/login-page';
+                },
+                error(error, status, request) {
+                    alert(error['responseJSON']['message']);
+                }
+            }
+        );
+    }
+
+    function companySignup() {
+        if (!confirmed) {
+            alert("이메일 인증이 되지 않았습니다!");
+            return;
+        }
+
+        let loginID = $('#company-login_id').val();
+        let password = $('#company-password').val();
+        let nickname = $('#company-nickname').val();
+        let email = $('#company-email').val();
+        let phone = $('#company-phone').val();
+        let companyName = $('#companyName').val();
+        let location = $('#location').val();
+        let industry = $('#industry').val();
+
+        let data = {
+            'loginId': loginID,
+            'password': password,
+            'nickname': nickname,
+            'email': email,
+            'phone': phone,
+            'companyName': companyName,
+            'location': location,
+            'industry': industry,
+            'confirmed': confirmed
+        };
+
+        $.ajax({
+                type: 'POST',
+                url: '/api/companies/signup',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert(response['message']);
+                    window.location.href = '/login-page';
+                },
+                error(error, status, request) {
+                    alert(error['responseJSON']['message']);
+                }
+            }
+        );
+    }
+</script>
+
+
+<body>
+<h1>Sign up Spring Jobs</h1>
+<span>
+    <button onclick="showUserform()">개인 회원</button>
+    <button onclick="showCompanyform()">기업 회원</button>
+</span>
+
+<div id="user-form">
+    <h2>개인 회원</h2>
+    <div>
+        <label for="login_id">ID</label>
+        <input type="text" id="login_id" placeholder="아이디">
+    </div>
+
+    <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="비밀번호">
+    </div>
+
+    <div>
+        <label for="nickname">Nickname</label>
+        <input type="text" id="nickname" placeholder="닉네임">
+    </div>
+
+    <div>
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" placeholder="전화번호">
+    </div>
+
+    <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="이메일">
+        <button onclick="sendMail()" class="btn btn-outline-primary" type="button" id="send-btn">인증 메일 전송</button>
+    </div>
+
+    <div class="form-group last mb-4 check_input">
+        <label for="input_code">인증번호를 입력해주세요</label>
+        <input type="text" id="input_code">
+        <button onclick="checkCode()" class="btn btn-outline-primary" type="button" id="auth-btn" disabled>인증</button>
+    </div>
+    <label for="input_code" id="email_confirm_txt"></label>
+
+    <button onclick="userSignup()" id="user-sign-up-btn">회원 가입</button>
+
+
+</div>
+
+<div id="company-form">
+    <h2>기업 회원</h2>
+    <div>
+        <label for="company-login_id">ID</label>
+        <input type="text" id="company-login_id" placeholder="아이디">
+    </div>
+
+    <div>
+        <label for="company-password">Password</label>
+        <input type="password" id="company-password" placeholder="비밀번호">
+    </div>
+
+    <div>
+        <label for="company-nickname">Nickname</label>
+        <input type="text" id="company-nickname" placeholder="닉네임">
+    </div>
+
+    <div>
+        <label for="company-phone">Phone Number</label>
+        <input type="text" id="company-phone" placeholder="전화번호">
+    </div>
+
+    <div>
+        <label for="company-email">Email</label>
+        <input type="email" id="company-email" placeholder="이메일">
+        <button onclick="sendMail()" class="btn btn-outline-primary" type="button" id="company-send-btn">인증 메일 전송
+        </button>
+    </div>
+
+    <div class="form-group last mb-4 check_input">
+        <label for="company-input_code">인증번호를 입력해주세요</label>
+        <input type="text" id="company-input_code">
+        <button onclick="checkCode()" class="btn btn-outline-primary" type="button" id="company-auth-btn" disabled>인증
+        </button>
+    </div>
+
+    <div>
+        <label for="company-phone">Company Name</label>
+        <input type="text" id="companyName" placeholder="기업명">
+    </div>
+
+    <div>
+        <label for="company-phone">Location</label>
+        <input type="text" id="location" placeholder="위치">
+    </div>
+
+    <div>
+        <label for="company-phone">Industry</label>
+        <input type="text" id="industry" placeholder="산업군">
+    </div>
+    <button onclick="companySignup()" id="company-sign-up-btn">회원 가입</button>
+</div>
+<br>
+<span>이미 회원 이세요?
+<button id="login-id-btn" onclick="location.href='/login-page'">
+    로그인
+</button>
+</button>
+</span>
+</body>
+</html>

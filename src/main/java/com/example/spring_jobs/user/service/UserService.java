@@ -9,7 +9,6 @@ import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.dto.*;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,21 +35,26 @@ public class UserService {
         // 닉네임 중복 확인
         String nickname = userSignupRequestDto.getNickname();
         checkNickname(nickname);
-        // email 중복확인
-        String email = userSignupRequestDto.getEmail();
-        checkEmail(email);
+
         String phone = userSignupRequestDto.getPhone();
         checkPhone(phone);
 
-        // 사용자 등록
-        User user = User.builder()
-                .loginId(loginId)
-                .password(password)
-                .email(email)
-                .nickname(nickname)
-                .phone(userSignupRequestDto.getPhone())
-                .role(UserRoleEnum.USER).build();
-        userRepository.save(user);
+        String email = userSignupRequestDto.getEmail();
+
+        if (userSignupRequestDto.isConfirmed()) {
+            // 사용자 등록
+            User user = User.builder()
+                    .loginId(loginId)
+                    .password(password)
+                    .email(email)
+                    .nickname(nickname)
+                    .phone(userSignupRequestDto.getPhone())
+                    .role(UserRoleEnum.USER).build();
+            userRepository.save(user);
+        } else {
+            throw new CustomException(StatusEnum.FAIL_EMAIL_CONFIRM);
+        }
+
     }
 
     public String login(LoginRequestDto loginRequestDto) {
@@ -72,33 +76,30 @@ public class UserService {
         return jwtUtil.createToken(loginId, userDetails.getUser().getRole());
     }
 
-    public UserResponseDto getUserInfo(String loginId) {
-        User user = findUser(loginId);
-        return new UserResponseDto(user);
+    public UserResponseDto getUserInfo(Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
+
+        return new UserResponseDto(findUser);
     }
 
     @Transactional
-    public void updateUser(UserUpdateDto userUpdateDto, String loginId) {
-        User user = findUser(loginId);
+    public void updateUser(UserUpdateDto userUpdateDto, Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
 
-         // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
-        if(!user.getNickname().equals(userUpdateDto.getNickname())) {
+        // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
+        if (!findUser.getNickname().equals(userUpdateDto.getNickname())) {
             checkNickname(userUpdateDto.getNickname());
         }
-        if(!user.getEmail().equals(userUpdateDto.getEmail())) {
+        if (!findUser.getEmail().equals(userUpdateDto.getEmail())) {
             checkEmail(userUpdateDto.getEmail());
         }
-        if(!user.getPhone().equals(userUpdateDto.getPhone())) {
+        if (!findUser.getPhone().equals(userUpdateDto.getPhone())) {
             checkPhone(userUpdateDto.getPhone());
         }
 
-        user.updateInfo(userUpdateDto);
-    }
-
-    private User findUser(String loginId) {
-        User findUser = userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
-        return findUser;
+        findUser.updateInfo(userUpdateDto);
     }
 
     @Transactional

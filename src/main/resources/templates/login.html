@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 페이지</title>
+    <link rel="shortcut icon" href="#">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+</head>
+<body>
+<div id="login-form">
+    <div id="login-title">Log into SpringJobs</div>
+    <br>
+
+    <div>
+        <label>ID</label>
+        <input type="text" id="loginId" class="login-input-box">
+
+        <label>Password</label>
+        <input type="password" name="password" id="password">
+
+        <button onclick="login()">로그인</button>
+    </div>
+    <div id="login-failed" style="display:none" class="alert alert-danger" role="alert">로그인 실패!! 회원을 찾을 수 없습니다.</div>
+    <span>아직 회원이 아니세요?
+    <button id="login-id-btn" onclick="location.href='/page/signup-page'">
+        회원 가입
+    </button>
+    </span>
+</div>
+</body>
+<script>
+    $(document).ready(function () {
+        // 토큰 삭제
+        Cookies.remove('Authorization', {path: '/'});
+    });
+
+    const href = location.href;
+    const queryString = href.substring(href.indexOf("?") + 1)
+    if (queryString === 'error') {
+        $('#login-failed').show();
+    }
+
+    const host = 'http://' + window.location.host;
+
+    function login() {
+        let loginId = $('#loginId').val();
+        let password = $('#password').val();
+
+        $.ajax({
+            type: "POST",
+            url: `/api/signin`,
+            contentType: "application/json",
+            data: JSON.stringify({"loginId": loginId, password: password}),
+            error(error) {
+                alert(error['responseText']);
+                window.location.href = host + '/page/login-page?error'
+            }
+        })
+            .done(function (res, status, xhr) {
+                const token = xhr.getResponseHeader('Authorization');
+
+                Cookies.set('Authorization', token, {path: '/'})
+
+                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', token);
+                });
+
+                window.location.href = host;
+
+            })
+    }
+</script>
+</html>

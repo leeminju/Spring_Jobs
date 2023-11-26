@@ -27,4 +27,5 @@ public class CompanySignupRequestDto {
 	private String companyName;
 	private String location;
 	private String industry;
+	private boolean confirmed;
 }

@@ -11,7 +11,6 @@ import com.example.spring_jobs.company.repository.CompanyRepository;
 import com.example.spring_jobs.user.UserRoleEnum;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class CompanyService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CompanyRepository companyRepository;
-    private final JwtUtil jwtUtil;
 
     public void signup(CompanySignupRequestDto companySignupRequestDto) {
         String loginId = companySignupRequestDto.getLoginId();
@@ -40,57 +38,58 @@ public class CompanyService {
         checkNicname(nickname);
         // email 중복확인
         String email = companySignupRequestDto.getEmail();
-        checkEmail(email);
+        //   checkEmail(email);
 
         String phone = companySignupRequestDto.getPhone();
         checkPhone(phone);
 
-        User user = User.builder()
-                .loginId(loginId)
-                .nickname(nickname)
-                .password(password)
-                .email(email)
-                .phone(phone)
-                .role(UserRoleEnum.COMPANY).build();
-        Company company = Company.builder()
-                .companyName(companyName)
-                .industry(companySignupRequestDto.getIndustry())
-                .location(companySignupRequestDto.getLocation())
-                .user(user).build();
+        if (companySignupRequestDto.isConfirmed()) {
+            User user = User.builder()
+                    .loginId(loginId)
+                    .nickname(nickname)
+                    .password(password)
+                    .email(email)
+                    .phone(phone)
+                    .role(UserRoleEnum.COMPANY).build();
+            Company company = Company.builder()
+                    .companyName(companyName)
+                    .industry(companySignupRequestDto.getIndustry())
+                    .location(companySignupRequestDto.getLocation())
+                    .user(user).build();
 
-        companyRepository.save(company);
+            companyRepository.save(company);
+        } else {
+            throw new CustomException(StatusEnum.FAIL_EMAIL_CONFIRM);
+        }
     }
 
-    public CompanyResponseDto getCompanyInfo(String loginId) {
-        Company company = findCompany(loginId);
-        return new CompanyResponseDto(company);
+    public CompanyResponseDto getCompanyInfo(Long companyId) {
+        Company findCompany = companyRepository.findById(companyId)
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
+
+        return new CompanyResponseDto(findCompany);
     }
 
     @Transactional
-    public void updateCompany(CompanyUpdateDto companyUpdateDto, String loginId) {
-        Company company = findCompany(loginId);
+    public void updateCompany(CompanyUpdateDto companyUpdateDto, Long companyId) {
+        Company findCompany = companyRepository.findById(companyId)
+                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
 
         // 같은 값으로 업데이트 가능하지만 다른 값으로 업데이트 시 중복체크 해줘야함
-        if (!company.getCompanyName().equals(companyUpdateDto.getCompanyName())) {
+        if (!findCompany.getCompanyName().equals(companyUpdateDto.getCompanyName())) {
             checkCompanyName(companyUpdateDto.getCompanyName());
         }
-        if (!company.getUser().getNickname().equals(companyUpdateDto.getNickname())) {
+        if (!findCompany.getUser().getNickname().equals(companyUpdateDto.getNickname())) {
             checkNicname(companyUpdateDto.getNickname());
         }
-        if (!company.getUser().getEmail().equals(companyUpdateDto.getEmail())) {
+        if (!findCompany.getUser().getEmail().equals(companyUpdateDto.getEmail())) {
             checkEmail(companyUpdateDto.getEmail());
         }
-        if (!company.getUser().getPhone().equals(companyUpdateDto.getPhone())) {
+        if (!findCompany.getUser().getPhone().equals(companyUpdateDto.getPhone())) {
             checkPhone(companyUpdateDto.getPhone());
         }
 
-        company.updateInfo(companyUpdateDto);
-    }
-
-    private Company findCompany(String loginId) {
-        Company findCompany = companyRepository.findByUserLoginId(loginId)
-                .orElseThrow(() -> new CustomException(StatusEnum.UsernameNotFoundException));
-        return findCompany;
+        findCompany.updateInfo(companyUpdateDto);
     }
 
     private void checkNicname(String nickname) {

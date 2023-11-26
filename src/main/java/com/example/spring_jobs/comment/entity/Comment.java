@@ -1,18 +1,15 @@
 package com.example.spring_jobs.comment.entity;
 
-import com.example.spring_jobs.company.entity.Company;
 import com.example.spring_jobs.post.Timestamped;
 import com.example.spring_jobs.post.entity.Post;
 import com.example.spring_jobs.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity(name = "comment")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Comment extends Timestamped {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,4 +25,13 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private String content;
 
+    public Comment(User user, Post post, String content) {
+        this.user = user;
+        this.post = post;
+        this.content = content;
+    }
+
+    public void updateContent(String updateContent) {
+        this.content = updateContent;
+    }
 }
