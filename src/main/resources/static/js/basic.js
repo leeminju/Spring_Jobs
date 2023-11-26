@@ -57,10 +57,12 @@ function authorizationCheck() {
         $('#mypage').hide();
         $('#my_tap').hide();
         $('#post-btn').hide();
+        $('#password-btn').hide();
     }
 }
 
 function logout() {
+
     $.ajax({
         type: 'GET',
         url: `/api/users/logout`,
