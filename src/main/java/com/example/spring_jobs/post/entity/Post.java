@@ -53,7 +53,7 @@ public class Post extends Timestamped {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
