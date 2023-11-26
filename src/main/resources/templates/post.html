@@ -10,6 +10,7 @@
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/basic.js"></script>
 </head>
 
 <script>
@@ -17,6 +18,7 @@
         const receivedData = location.href.split('?')[1];
         let id = Number(receivedData); // data
         getPost(id);
+        getMyLike(id);
     })
 
     function getPost(id) {
@@ -34,12 +36,14 @@
                 let empType = response['empType'];
                 let education = response['education'];
                 let company = response['company'];
+                let likeCount = response['likes'];
 
                 let companyName = company['companyName'];
                 let email = company['email'];
                 let phone = company['phone'];
                 let location = company['location'];
                 let industry = company['industry'];
+
 
                 $('title').text(title);
                 $('#title').text(title);
@@ -50,7 +54,7 @@
                 $('#deadline').text(deadline);
                 $('#empType').text(empType);
                 $('#education').text(education);
-
+                $('#count').text(likeCount);
 
                 $('#companyName').text(companyName);
                 $('#email').text(email);
@@ -63,44 +67,62 @@
             }
         });
     }
+
+    function getMyLike(id){
+        $.ajax({
+            type: 'GET',
+            url: `/api/getMyLike/${id}`,
+            contentType: 'application/json',
+            success: function (response) {
+                if(response){
+                    $("#checkbox").prop("checked", true);
+                }else{
+                    $("#checkbox").prop("checked", false);
+                }
+            },
+            error(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function like(id){
+        $.ajax({
+            type: 'POST',
+            url: `/api/like/${id}`,
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.status === 201){
+                    $("#checkbox").prop("checked", true);
+                }else if(response.status === 200){
+                    $("#checkbox").prop("checked", false);
+                }
+                alert(response.message);
+                getPost(id);
+            },
+            error(error, status, request) {
+                console.log(error);
+            }
+        });
+    }
+
+    function showDiv(message){
+
+    }
 </script>
 <body>
-<header class="p-3 text-bg-white">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a class="nav-link px-2 text-info" href="/">Spring Jobs</a></li>
-            </ul>
-
-            <div class="text-end">
-                <button id="sign-in-btn" class="btn btn-info" onclick="location.href='/login-page'">
-                    Sign in
-                </button>
-                <button id="sign-up-btn" class="btn btn-outline-info" onclick="location.href='/signup-page'">
-                    Sign up
-                </button>
-                <button class="btn btn-outline-warning" id="post-btn" onclick="location.href='/my-page'">
-                    공고 등록
-                </button>
-                <button class="btn btn-info" id="mypage" onclick="location.href='/my-page'">
-                    <span id="nickname"></span>님의 마이 페이지
-                </button>
-                <button class="btn btn-outline-info" id="logout-btn" onclick="logout()">
-                    Logout
-                </button>
-            </div>
-        </div>
-    </div>
+<header>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
 </header>
 <div id="post-box">
     <div id ="post-box2">
-        <h1 id="title"></h1>
+        <div class = "title-area">
+            <h1 id="title" style="display: inline;"></h1>
+            <div class="form-check form-switch" style="display: inline-block" onclick="like(location.href.split('?')[1])">
+                <input class="form-check-input" type="checkbox" id="checkbox">
+                <label class="form-check-label" for="checkbox" id="count"></label>
+            </div>
+        </div>
         <img class="post_image" id="image" src="" alt="...">
         <div id="company-box">
             <h3>기업 정보</h3>
