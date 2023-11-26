@@ -11,108 +11,11 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/basic.js"></script>
+    <script src="/js/post.js"></script>
 </head>
-
-<script>
-    $(document).ready(function () {
-        const receivedData = location.href.split('?')[1];
-        let id = Number(receivedData); // data
-        getPost(id);
-        getMyLike(id);
-    })
-
-    function getPost(id) {
-        $.ajax({
-            type: 'GET',
-            url: `/api/posts/${id}`,
-            contentType: 'application/json',
-            success: function (response) {
-                let title = response['title'];
-                let image = response['image'];
-                let contents = response['contents'];
-                let deadline = response['deadline'];
-                let career = response['career'];
-                let skill = response['skill'];
-                let empType = response['empType'];
-                let education = response['education'];
-                let company = response['company'];
-                let likeCount = response['likes'];
-
-                let companyName = company['companyName'];
-                let email = company['email'];
-                let phone = company['phone'];
-                let location = company['location'];
-                let industry = company['industry'];
-
-
-                $('title').text(title);
-                $('#title').text(title);
-                $('#image').attr("src", image);
-                $('#contents').text(contents);
-                $('#career').text(career);
-                $('#skill').text(skill);
-                $('#deadline').text(deadline);
-                $('#empType').text(empType);
-                $('#education').text(education);
-                $('#count').text(likeCount);
-
-                $('#companyName').text(companyName);
-                $('#email').text(email);
-                $('#phone').text(phone);
-                $('#industry').text(industry);
-                $('#location').text(location);
-            },
-            error(error, status, request) {
-                console.log(error);
-            }
-        });
-    }
-
-    function getMyLike(id){
-        $.ajax({
-            type: 'GET',
-            url: `/api/getMyLike/${id}`,
-            contentType: 'application/json',
-            success: function (response) {
-                if(response){
-                    $("#checkbox").prop("checked", true);
-                }else{
-                    $("#checkbox").prop("checked", false);
-                }
-            },
-            error(error) {
-                console.log(error);
-            }
-        });
-    }
-
-    function like(id){
-        $.ajax({
-            type: 'POST',
-            url: `/api/like/${id}`,
-            contentType: 'application/json',
-            success: function (response) {
-                if(response.status === 201){
-                    $("#checkbox").prop("checked", true);
-                }else if(response.status === 200){
-                    $("#checkbox").prop("checked", false);
-                }
-                alert(response.message);
-                getPost(id);
-            },
-            error(error, status, request) {
-                console.log(error);
-            }
-        });
-    }
-
-    function showDiv(message){
-
-    }
-</script>
 <body>
 <header>
-    <div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div th:replace="~{/fragments/header.html}"></div>
 </header>
 <div id="post-box">
     <div id ="post-box2">
@@ -123,46 +26,46 @@
                 <label class="form-check-label" for="checkbox" id="count"></label>
             </div>
         </div>
-        <img class="post_image" id="image" src="" alt="...">
-        <div id="company-box">
-            <h3>기업 정보</h3>
-            <br>
-            기업명 :
-            <span id="companyName"></span>
-            <br>
-            이메일 :
-            <span id="email"></span>
-            <br>
-            전화번호 :
-            <span id="phone"></span>
-            <br>
-            산업군:
-            <span id="industry"></span>
-            <br>
-            위치:
-            <span id="location"></span>
+
+        <div class="card mb-3">
+            <img src="" class="post_image card-img-top" alt="..." id="image">
+            <div class="card-body">
+                <h3>기업 정보</h3>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">기업명 : <span id="companyName"></span></li>
+                    <li class="list-group-item">이메일 : <span id="email"></span></li>
+                    <li class="list-group-item">전화번호 : <span id="phone"></span></li>
+                    <li class="list-group-item">산업군: <span id="industry"></span></li>
+                    <li class="list-group-item">위치: <span id="location"></span></li>
+                </ul>
+            </div>
         </div>
 
-        <div id="contents"></div>
-
-        <div id="post-info">
-            <br>
-            고용 형태 :
-            <span id="empType"></span>
-            스킬 :
-            <span id="skill"></span>
-            <br>
-            직무 :
-            <span id="career"></span>
-            <br>
-            학력 :
-            <span id="education"></span>
-            <br>
-            마감일:
-            <span id="deadline"></span>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 id="contents"></h3>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">고용 형태 : <span id="empType"></span></li>
+                    <li class="list-group-item">스킬 : <span id="skill"></span></li>
+                    <li class="list-group-item">직무 : <span id="career"></span></li>
+                    <li class="list-group-item"> 학력 : <span id="education"></span></li>
+                    <li class="list-group-item">마감일: <span id="deadline"></span></li>
+                </ul>
+            </div>
         </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 id="commentTitle"></h3>
+                <ul class="list-group list-group-flush" id="commentList">
+                </ul>
+            </div>
+        </div>
+
+
+
+
     </div>
 </div>
-
 </body>
 </html>
