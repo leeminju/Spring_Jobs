@@ -1,8 +1,27 @@
+const receivedData = location.href.split('?')[1];
 $(document).ready(function () {
-    const receivedData = location.href.split('?')[1];
     let id = Number(receivedData); // data
     getPost(id);
     getMyLike(id);
+
+    $("#button-addon2").click(function(){
+        $.ajax({
+            type: 'POST',
+            url: `/api/posts/${receivedData}/comments`,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "content": $("#commentInput").val()
+            }),
+            async: true,
+            success: function (response) {
+                alert(response.message);
+                location.reload();
+            },
+            error(error, status, response) {
+                alert(error.responseJSON.message);
+            }
+        });
+    });
 })
 
 function getPost(id) {

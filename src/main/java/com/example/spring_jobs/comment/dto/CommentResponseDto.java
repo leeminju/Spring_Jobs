@@ -1,21 +1,17 @@
 package com.example.spring_jobs.comment.dto;
 
 import com.example.spring_jobs.comment.entity.Comment;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 public class CommentResponseDto {
-    private final List<Comment> commentList;
-    public CommentResponseDto(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
+    private final String comment;
+    private final String nickname;
+    private final Long userId;
 
-    public List<String> getContentsList() {
-        return commentList.stream()
-                .map(Comment::getContent)
-                .toList();
+    public CommentResponseDto(Comment comment) {
+        this.comment = comment.getContent();
+        this.nickname = comment.getUser().getNickname();
+        this.userId = comment.getUser().getId();
     }
 }
