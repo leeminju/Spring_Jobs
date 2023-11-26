@@ -6,17 +6,12 @@ import com.example.spring_jobs.common.StatusEnum;
 import com.example.spring_jobs.company.dto.CompanyResponseDto;
 import com.example.spring_jobs.company.dto.CompanySignupRequestDto;
 import com.example.spring_jobs.company.dto.CompanyUpdateDto;
-import com.example.spring_jobs.company.dto.CompanySignupRequestDto;
 import com.example.spring_jobs.company.service.CompanyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
@@ -33,14 +28,14 @@ public class CompanyController {
 
 	@GetMapping("/companies")
 	public CompanyResponseDto getCompanyInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		String loginId = userDetails.getUsername();
-		return companyService.getCompanyInfo(loginId);
+		Long companyId = userDetails.getUser().getCompany().getId();
+		return companyService.getCompanyInfo(companyId);
 	}
 
 	@PatchMapping("/companies")
 	public ResponseEntity<CustomResponseEntity> updateCompany(@Valid @RequestBody CompanyUpdateDto companyUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		String loginId = userDetails.getUsername();
-		companyService.updateCompany(companyUpdateDto, loginId);
+		Long companyId = userDetails.getUser().getCompany().getId();
+		companyService.updateCompany(companyUpdateDto, companyId);
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_COMPANY_UPDATE);
 	}
 
