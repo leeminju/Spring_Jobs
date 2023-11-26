@@ -4,7 +4,7 @@ $(document).ready(function () {
     getPost(id);
     getMyLike(id);
 
-    $("#button-addon2").click(function(){
+    $("#button-addon2").click(function () {
         $.ajax({
             type: 'POST',
             url: `/api/posts/${receivedData}/comments`,
@@ -76,7 +76,6 @@ $(document).ready(function () {
 })
 
 
-
 function getPost(id) {
     $.ajax({
         type: 'GET',
@@ -87,6 +86,7 @@ function getPost(id) {
             let image = response['image'];
             let contents = response['contents'];
             let deadline = response['deadline'];
+            let job = response['job'];
             let career = response['career'];
             let skill = response['skill'];
             let empType = response['empType'];
@@ -106,6 +106,7 @@ function getPost(id) {
             $('#title').text(title);
             $('#image').attr("src", image);
             $('#contents').text(contents);
+            $('#job').text(job);
             $('#career').text(career);
             $('#skill').text(skill);
             $('#deadline').text(deadline);
@@ -119,7 +120,7 @@ function getPost(id) {
             $('#industry').text(industry);
             $('#location').text(location);
 
-            if($('#owner').val() === company['loginId']) {
+            if ($('#owner').val() === company['loginId']) {
                 let html = `<div>
                                     <button class="btn btn-primary" onclick="location.href='/posts/${response["id"]}/edit'">수정</button>
                                 </div>
@@ -127,9 +128,9 @@ function getPost(id) {
                 $('#title').append(html);
             }
 
-            if(commentList.length === 0){
+            if (commentList.length === 0) {
                 $("#commentTitle").text("댓글이 없습니다.");
-            }else{
+            } else {
                 for (i = 0; i < commentList.length; i++) {
                     let comment = commentList[i].comment;
                     let name = commentList[i].nickname;
@@ -146,15 +147,15 @@ function getPost(id) {
     });
 }
 
-function getMyLike(id){
+function getMyLike(id) {
     $.ajax({
         type: 'GET',
         url: `/api/getMyLike/${id}`,
         contentType: 'application/json',
         success: function (response) {
-            if(response){
+            if (response) {
                 $("#checkbox").prop("checked", true);
-            }else{
+            } else {
                 $("#checkbox").prop("checked", false);
             }
         },
@@ -164,15 +165,15 @@ function getMyLike(id){
     });
 }
 
-function like(id){
+function like(id) {
     $.ajax({
         type: 'POST',
         url: `/api/like/${id}`,
         contentType: 'application/json',
         success: function (response) {
-            if(response.status === 201){
+            if (response.status === 201) {
                 $("#checkbox").prop("checked", true);
-            }else if(response.status === 200){
+            } else if (response.status === 200) {
                 $("#checkbox").prop("checked", false);
             }
             alert(response.message);
