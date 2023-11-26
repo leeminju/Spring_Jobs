@@ -96,8 +96,9 @@ function like(id){
             alert(response.message);
             getPost(id);
         },
-        error(error, status, request) {
-            console.log(error);
+        error(error, status, response) {
+            $("#checkbox").prop("checked", false);
+            alert(error.responseJSON.message);
         }
     });
 }
