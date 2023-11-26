@@ -17,6 +17,7 @@
             let url = $(location).attr('href');
             let deleteUrl = url.substring(0, url.length-4) + "delete";
             $.post(deleteUrl);
+            location.replace("/");
         })
     })
 </script>
