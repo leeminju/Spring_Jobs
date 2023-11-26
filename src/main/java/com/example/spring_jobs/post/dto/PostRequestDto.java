@@ -15,4 +15,16 @@ public class PostRequestDto {
     private String skill;
     private String empType;
     private String education;
+
+    public PostRequestDto(String title, String image, String contents, String job, String deadline, String career, String skill, String empType, String education) {
+        this.title = title;
+        this.image = image;
+        this.contents = contents;
+        this.job = job;
+        this.deadline = deadline;
+        this.career = career;
+        this.skill = skill;
+        this.empType = empType;
+        this.education = education;
+    }
 }

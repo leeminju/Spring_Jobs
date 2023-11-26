@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,12 +38,18 @@ public class PostPageController {
 
     @PostMapping("/posts/{postId}/edit")
     public String updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.updatePost(postId,requestDto,userDetails.getUser());
+        System.out.println("=====================================");
+        System.out.println(requestDto.getTitle());
+        System.out.println(requestDto.getContents());
+        System.out.println(requestDto.getCareer());
+        System.out.println("=====================================");
+
+        postService.updatePost(postId, requestDto, userDetails.getUser());
         return "redirect:/post-page?{postId}";
     }
 
     @PostMapping("/posts/{postId}/delete")
-    private String deletePost(@PathVariable Long postId, UserDetailsImpl userDetails) {
+    private String deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.removePost(postId, userDetails.getUser());
         return "redirect:/";
     }

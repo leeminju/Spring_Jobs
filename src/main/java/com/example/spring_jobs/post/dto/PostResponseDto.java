@@ -17,6 +17,7 @@ public class PostResponseDto {
     private String image;
     private String contents;
     private String deadline;
+    private String job;
     private String career;
     private String skill;
     private String empType;
@@ -31,6 +32,7 @@ public class PostResponseDto {
         this.image = post.getImage();
         this.contents = post.getContents();
         this.deadline = post.getDeadline();
+        this.job = post.getJob();
         this.career = post.getCareer();
         this.skill = post.getSkill();
         this.empType = post.getEmpType();
