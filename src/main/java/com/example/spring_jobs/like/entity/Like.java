@@ -2,6 +2,7 @@ package com.example.spring_jobs.like.entity;
 
 import com.example.spring_jobs.post.entity.Post;
 import com.example.spring_jobs.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

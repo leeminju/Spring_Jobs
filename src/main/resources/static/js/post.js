@@ -1,9 +1,81 @@
+const receivedData = location.href.split('?')[1];
 $(document).ready(function () {
-    const receivedData = location.href.split('?')[1];
     let id = Number(receivedData); // data
     getPost(id);
     getMyLike(id);
+
+    $("#button-addon2").click(function(){
+        $.ajax({
+            type: 'POST',
+            url: `/api/posts/${receivedData}/comments`,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "content": $("#commentInput").val()
+            }),
+            async: true,
+            success: function (response) {
+                alert(response.message);
+                location.reload();
+            },
+            error(error, status, response) {
+                alert(error.responseJSON.message);
+            }
+        });
+    })
+
+    $(document).on('click', '.updateComment', function () {
+        const newCommentInput = `
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="수정 할 댓글을 입력하세요" id="updateValue">
+            <button class="btn btn-outline-secondary" type="button" id="updateBtn">수정</button>
+        </div>
+    `;
+        $(this).closest('.list-group-item').parent().append(newCommentInput);
+    });
+
+    $(document).on('click', '#updateBtn', function () {
+        const listItem = $(this).parent().prev();
+        const commentId = listItem.data('comment-id');
+        const updatedComment = $(this).prev().val();
+
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/posts/${receivedData}/comments/${commentId}`,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "content": updatedComment
+            }),
+            async: true,
+            success: function (response) {
+                alert(response.message);
+                location.reload();
+            },
+            error(error, status, response) {
+                alert(error.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on('click', '.deleteComment', function () {
+        const listItem = $(this).closest('.list-group-item');
+        const commentId = listItem.data('comment-id');
+
+        $.ajax({
+            type: 'DELETE',
+            url: `/api/posts/${receivedData}/comments/${commentId}`,
+            contentType: 'application/json',
+            success: function (response) {
+                alert(response.message);
+                location.reload();
+            },
+            error(error, status, response) {
+                alert(error.responseJSON.message);
+            }
+        });
+    });
 })
+
+
 
 function getPost(id) {
     $.ajax({
@@ -61,7 +133,7 @@ function getPost(id) {
                 for (i = 0; i < commentList.length; i++) {
                     let comment = commentList[i].comment;
                     let name = commentList[i].nickname;
-                    let userId = commentList[i].userId;
+                    let userId = commentList[i].id;
                     $("#commentTitle").text("댓글 " + commentList.length + "개");
                     let tempHtml = make_commentHtml(comment, name, userId);
                     $('#commentList').append(tempHtml);
@@ -114,11 +186,11 @@ function like(id){
 }
 
 
-function make_commentHtml(comment, nickname, userId) {
+function make_commentHtml(comment, nickname, commentId) {
     return `<ul class="list-group">
-                  <li class="list-group-item" value="${userId}">${comment}(작성자 : ${nickname})
-                      <button type="button" class="btn btn-outline-primary">수정</button>
-                      <button type="button" class="btn btn-outline-danger">삭제</button>
+                  <li class="list-group-item" data-comment-id="${commentId}">${comment}(작성자 : ${nickname})
+                      <button type="button" class="btn btn-outline-primary updateComment">수정</button>
+                      <button type="button" class="btn btn-outline-danger deleteComment">삭제</button>
                   </li>
             </ul>`;
 }
