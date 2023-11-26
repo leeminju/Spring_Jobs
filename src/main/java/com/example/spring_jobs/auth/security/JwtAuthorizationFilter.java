@@ -37,17 +37,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(tokenValue)) {
 
-            if (!jwtUtil.validateToken(tokenValue)) {
-                log.error("Token Error");
-                res.setContentType("application/json");
-                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                res.setCharacterEncoding("utf-8");
-
-                ObjectMapper mapper = new ObjectMapper();
-                String result = mapper.writeValueAsString(CustomResponseEntity.toResponseEntity(StatusEnum.TOKEN_NOT_VALID));
-                res.getWriter().write(result);
-                return;
-            }
+            jwtUtil.validateToken(tokenValue);
 
             Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
 

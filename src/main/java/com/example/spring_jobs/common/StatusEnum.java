@@ -26,6 +26,7 @@ public enum StatusEnum {
     SUCCESS_COMMENT_UPDATE(HttpStatus.OK, "SUCCESS_COMMENT_UPDATE", "댓글이 수정되었습니다."),
     SUCCESS_COMMENT_DELETE(HttpStatus.OK, "SUCCESS_DELETE_POST", "댓글이 삭제되었습니다."),
     TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, "TOKEN_NOT_VALID", "토큰이 유효하지 않습니다."),
+    FORBIDDEN_AUTH(HttpStatus.FORBIDDEN, "FORBIDDEN_AUTH", "접근 권한이 없습니다."),
     ROLE_NOT_COMPANY(HttpStatus.UNAUTHORIZED, "ROLE_NOT_COMPANY", "기업 회원이 아닙니다."),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "DUPLICATED_LOGIN_ID", "중복된 아이디가 존재합니다."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "DUPLICATED_NICKNAME", "중복된 닉네임이 존재합니다."),

@@ -44,4 +44,12 @@ public class CustomResponseEntity {
 						.message(e.getMessage())
 						.build());
 	}
+
+	public static CustomResponseEntity toCustomResponseEntity(StatusEnum e){
+		return CustomResponseEntity.builder()
+				.status(e.getHttpStatus().value())
+				.description(e.name())
+				.message(e.getMessage())
+				.build();
+	}
 }
