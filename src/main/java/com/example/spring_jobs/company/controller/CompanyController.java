@@ -7,9 +7,11 @@ import com.example.spring_jobs.company.dto.CompanyResponseDto;
 import com.example.spring_jobs.company.dto.CompanySignupRequestDto;
 import com.example.spring_jobs.company.dto.CompanyUpdateDto;
 import com.example.spring_jobs.company.service.CompanyService;
+import com.example.spring_jobs.user.UserRoleEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +28,14 @@ public class CompanyController {
 		return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_JOIN);
 	}
 
+	@Secured(UserRoleEnum.Authority.COMPANY)
 	@GetMapping("/companies")
 	public CompanyResponseDto getCompanyInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Long companyId = userDetails.getUser().getCompany().getId();
 		return companyService.getCompanyInfo(companyId);
 	}
 
+	@Secured(UserRoleEnum.Authority.COMPANY)
 	@PatchMapping("/companies")
 	public ResponseEntity<CustomResponseEntity> updateCompany(@Valid @RequestBody CompanyUpdateDto companyUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Long companyId = userDetails.getUser().getCompany().getId();

@@ -2,7 +2,6 @@ package com.example.spring_jobs.auth.config;
 
 
 import com.example.spring_jobs.auth.jwt.JwtUtil;
-import com.example.spring_jobs.auth.security.CustomAccessDeniedHandler;
 import com.example.spring_jobs.auth.security.JwtAuthorizationFilter;
 import com.example.spring_jobs.auth.security.UserDetailsServiceImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,11 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-<<<<<<<HEAD
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-=======
-        >>>>>>>4bed1ccfd53bd9fc952f4efa424cc61913c3b1a7
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

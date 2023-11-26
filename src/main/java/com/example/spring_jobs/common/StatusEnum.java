@@ -11,6 +11,7 @@ public enum StatusEnum {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_NOT_FOUND", "사용자가 존재하지 않습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT_NOT_FOUND", "댓글이 존재하지 않습니다."),
     POST_NOT_MATCHED(HttpStatus.UNAUTHORIZED, "POST_NOT_MATCHED", "게시글을 작성한 사용자가 아닙니다."),
+    COMMENT_NOT_MATCHED(HttpStatus.UNAUTHORIZED, "COMMENT_NOT_MATCHED", "댓글을 작성한 사용자가 아닙니다."),
     SUCCESS_JOIN(HttpStatus.CREATED, "SUCCESS_JOIN", "회원가입에 성공하였습니다."),
     SUCCESS_LOGIN(HttpStatus.OK, "SUCCESS_LOGIN", "로그인에 성공하였습니다."),
     SUCCESS_LOGOUT(HttpStatus.OK, "SUCCESS_LOGOUT", "로그아웃하였습니다."),

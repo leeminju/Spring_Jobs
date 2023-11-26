@@ -9,7 +9,9 @@ import com.example.spring_jobs.post.repository.PostCustomRepository;
 import com.example.spring_jobs.post.repository.PostRepository;
 import com.example.spring_jobs.user.entity.User;
 import com.example.spring_jobs.user.repository.UserRepository;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +40,8 @@ public class PostService {
     }
 
     public PostResponseDto getPost(Long id) {
-        Post post = postCustomRepository.findPostAndCommentAndLike(id).orElseThrow(() -> new CustomException(StatusEnum.POST_NOT_FOUND));
+        Post post = postCustomRepository.findPostAndCommentAndLike(id).orElseThrow(
+                () -> new CustomException(StatusEnum.POST_NOT_FOUND));
         return new PostResponseDto(post);
     }
 

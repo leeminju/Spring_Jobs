@@ -19,6 +19,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+
     @PostMapping
     @Secured(UserRoleEnum.Authority.USER)
     public ResponseEntity<CustomResponseEntity> createComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long postId, @RequestBody CommentRequestDto commentRequestDto) {
@@ -27,19 +28,19 @@ public class CommentController {
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_COMMENT_CREATE);
     }
 
-    @PatchMapping
+    @PatchMapping("/{commentId}")
     @Secured(UserRoleEnum.Authority.USER)
-    public ResponseEntity<CustomResponseEntity> updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long postId, @RequestBody  CommentRequestDto commentRequestDto) {
+    public ResponseEntity<CustomResponseEntity> updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long postId, @PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
         Long userId = userDetails.getUser().getId();
-        commentService.updateComment(userId, postId, commentRequestDto.getContent());
+        commentService.updateComment(userId, postId, commentId, commentRequestDto.getContent());
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_COMMENT_UPDATE);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{commentId}")
     @Secured(UserRoleEnum.Authority.USER)
-    public ResponseEntity<CustomResponseEntity> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long postId) {
+    public ResponseEntity<CustomResponseEntity> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long postId, @PathVariable Long commentId) {
         Long userId = userDetails.getUser().getId();
-        commentService.deleteComment(userId, postId);
+        commentService.deleteComment(userId, postId, commentId);
         return CustomResponseEntity.toResponseEntity(StatusEnum.SUCCESS_COMMENT_DELETE);
     }
 }

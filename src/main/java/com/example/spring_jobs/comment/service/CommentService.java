@@ -31,17 +31,33 @@ public class CommentService {
     }
 
     @Transactional
-    public void updateComment(Long userId, Long postId, String updateContent) {
-        Comment findComment = commentRepository.findByUserIdAndPostId(userId, postId)
+    public void updateComment(Long userId, Long postId, Long commentId, String updateContent) {
+        Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(StatusEnum.COMMENT_NOT_FOUND));
+
+        if (!findComment.getPost().getId().equals(postId)) {
+            throw new CustomException(StatusEnum.COMMENT_NOT_FOUND);
+        }
+
+        if (!findComment.getUser().getId().equals(userId)) {
+            throw new CustomException(StatusEnum.COMMENT_NOT_MATCHED);
+        }
 
         findComment.updateContent(updateContent);
     }
 
     @Transactional
-    public void deleteComment(Long userId, Long postId) {
-        Comment findComment = commentRepository.findByUserIdAndPostId(userId, postId)
+    public void deleteComment(Long userId, Long postId, Long commentId) {
+        Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(StatusEnum.COMMENT_NOT_FOUND));
+
+        if (!findComment.getPost().getId().equals(postId)) {
+            throw new CustomException(StatusEnum.COMMENT_NOT_FOUND);
+        }
+
+        if (!findComment.getUser().getId().equals(userId)) {
+            throw new CustomException(StatusEnum.COMMENT_NOT_MATCHED);
+        }
 
         commentRepository.delete(findComment);
     }
