@@ -1,0 +1,36 @@
+#card-box {
+    width: 80%;
+    margin: 20px auto 0px auto;
+}
+
+.post_image {
+    object-fit: cover;
+    width: 100%;
+}
+
+#post-box {
+    width: 80%;
+    margin: 20px auto 0px auto;
+    padding: 20px;
+    border-radius: 30px;
+    border: 1px solid grey;
+}
+
+
+#post-box2 {
+    width: 80%;
+    margin: 20px auto 0px auto;
+}
+
+#company-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    width: 100%;
+    border-radius: 30px;
+    border: 1px solid grey;
+}
+
+#post-info {
+    margin-top: 20px;
+}
